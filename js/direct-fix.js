@@ -49,80 +49,84 @@
                 try {
                     console.log(`DIRECT FIX: Fetching ${url}`);
                     const response = await fetch(url);
-                    
                     if (!response.ok) {
-                        console.error(`DIRECT FIX: Failed to fetch ${url}, status: ${response.status}`);
-                        return [];
+                        throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
                     }
-                    
-                    const text = await response.text();
-                    try {
-                        const data = JSON.parse(text);
-                        if (!Array.isArray(data)) {
-                            console.error(`DIRECT FIX: Expected array in ${url}, got:`, typeof data);
-                            return [];
-                        }
-                        console.log(`DIRECT FIX: Successfully loaded ${data.length} products from ${url}`);
-                        
-                        // Log first item for debugging
-                        if (data.length > 0) {
-                            console.log(`DIRECT FIX: Sample product from ${url}:`, data[0]);
-                        }
-                        
-                        return data;
-                    } catch (parseError) {
-                        console.error(`DIRECT FIX: JSON parse error in ${url}:`, parseError);
-                        console.log(`DIRECT FIX: Raw response (first 100 chars): ${text.substring(0, 100)}`);
-                        return [];
-                    }
-                } catch (fetchError) {
-                    console.error(`DIRECT FIX: Network error fetching ${url}:`, fetchError);
-                    return [];
+                    return await response.json();
+                } catch (error) {
+                    console.error(`DIRECT FIX: Error fetching ${url}:`, error);
+                    return { products: [] };
                 }
             };
             
-            // Try both relative and absolute paths
-            let menProducts = await fetchJson('man/products.json');
-            let womenProducts = await fetchJson('women/products.json');
-            let unisexProducts = await fetchJson('unisex/products.json');
-            
-            // If any failed, try with leading slash
-            if (menProducts.length === 0) menProducts = await fetchJson('/man/products.json');
-            if (womenProducts.length === 0) womenProducts = await fetchJson('/women/products.json');
-            if (unisexProducts.length === 0) unisexProducts = await fetchJson('/unisex/products.json');
+            // Fetch all product JSON files
+            const [menData, womenData, unisexData] = await Promise.all([
+                fetchJson('/man/products.json'),
+                fetchJson('/women/products.json'),
+                fetchJson('/unisex/products.json')
+            ]);
             
             // Combine all products
-            const allProducts = [...menProducts, ...womenProducts, ...unisexProducts];
+            const allProducts = [
+                ...(menData.products || []),
+                ...(womenData.products || []),
+                ...(unisexData.products || [])
+            ];
             
-            // Validate and normalize products
+            // Validate products and normalize brand names
             const validProducts = allProducts.filter(product => {
-                return product && 
-                       typeof product === 'object' && 
-                       product.name && 
-                       product.brand && 
-                       (product.price !== undefined) && 
-                       product.category && 
-                       Array.isArray(product.sizes);
-            }).map(product => {
-                // Normalize product data
-                return {
-                    ...product,
-                    brand: (product.brand || '').toLowerCase(),
-                    price: typeof product.price === 'number' ? product.price : 
-                           parseInt(String(product.price).replace(/[^\d]/g, '')) || 0,
-                    category: (product.category || '').toLowerCase(),
-                    collection: (product.collection || '').toLowerCase()
-                };
+                if (!product || !product.name || !product.price || !product.image) {
+                    console.error("DIRECT FIX: Invalid product found:", product);
+                    return false;
+                }
+                
+                // Ensure brand is properly set and normalized
+                if (!product.brand) {
+                    // Try to extract brand from name
+                    const brandNames = ['Nike', 'Adidas', 'Jordan', 'New Balance', 'Puma', 'Reebok', 'Asics', 'Converse'];
+                    for (const brand of brandNames) {
+                        if (product.name.includes(brand)) {
+                            product.brand = brand;
+                            break;
+                        }
+                    }
+                    
+                    // Default to Unknown if still not set
+                    if (!product.brand) {
+                        product.brand = 'Unknown';
+                    }
+                }
+                
+                // Normalize Nike brand name
+                if (product.brand.toLowerCase().includes('nike')) {
+                    product.brand = 'Nike';
+                    console.log(`DIRECT FIX: Normalized Nike product - ${product.name}`);
+                }
+                
+                // Ensure other required fields
+                if (!product.category) product.category = 'unisex';
+                if (!product.collection) product.collection = 'General';
+                if (!product.sizes || !Array.isArray(product.sizes) || product.sizes.length === 0) {
+                    product.sizes = ['7', '8', '9', '10', '11'];
+                }
+                
+                return true;
             });
             
             console.log(`DIRECT FIX: Loaded ${validProducts.length} valid products`);
             
-            // Store products in global variable for debugging
-            window.DIRECT_FIX_PRODUCTS = validProducts;
+            // Count products by brand
+            const brandCounts = {};
+            validProducts.forEach(product => {
+                const brand = product.brand || 'Unknown';
+                brandCounts[brand] = (brandCounts[brand] || 0) + 1;
+            });
+            
+            console.log("DIRECT FIX: Products by brand:", brandCounts);
             
             return validProducts;
         } catch (error) {
-            console.error("DIRECT FIX: Error loading products:", error);
+            console.error("DIRECT FIX: Failed to load products:", error);
             return [];
         }
     }
@@ -362,7 +366,18 @@
             
             // Check brand
             const meetsBrand = selectedBrands.length === 0 || 
-                selectedBrands.some(brand => product.brand.includes(brand));
+                selectedBrands.some(brand => {
+                    // Case-insensitive comparison for brand names
+                    const productBrand = product.brand.toLowerCase();
+                    const selectedBrand = brand.toLowerCase();
+                    
+                    // Debug brand matching for Nike products
+                    if (selectedBrand === 'nike' && productBrand.includes('nike')) {
+                        console.log(`DIRECT FIX: Nike product match - ${product.name}, Brand: ${product.brand}`);
+                    }
+                    
+                    return productBrand.includes(selectedBrand) || selectedBrand.includes(productBrand);
+                });
             
             // Check category with unisex handling
             let meetsCategory = false;
@@ -440,41 +455,52 @@
         // Clear existing content
         productsGrid.innerHTML = '';
         
-        // Create product cards
-        filteredProducts.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.setAttribute('data-price', product.price);
-            card.setAttribute('data-brand', product.brand);
-            card.setAttribute('data-category', product.category);
-            card.setAttribute('data-collection', product.collection.replace(/ /g, '-'));
-            card.setAttribute('data-sizes', product.sizes.join(','));
-            if (product.new) card.setAttribute('data-new', 'true');
-            
-            card.innerHTML = `
-                ${product.new ? '<div class="product-tag new">New</div>' : ''}
-                <div class="product-category-tag${product.category === 'unisex' ? ' unisex' : ''}">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
-                <img src="${product.image}" alt="${product.name}" loading="lazy">
-                <div class="product-info">
-                    <h3>${product.name}</h3>
-                    <div class="price">$${product.price}</div>
-                </div>
-                <div class="product-actions">
-                    <button class="btn quick-view-btn">Quick View</button>
-                </div>
-            `;
-            
-            productsGrid.appendChild(card);
-        });
+        console.log(`DIRECT FIX: Rendering ${filteredProducts.length} filtered products`);
         
-        // Apply sorting
-        const sortSelect = document.getElementById('sort-select');
-        if (sortSelect) {
-            sortProducts(sortSelect.value || 'new');
+        // Force display of all products that match the filter
+        if (filteredProducts.length === 0) {
+            console.log("DIRECT FIX: No products match the filter criteria");
+        } else {
+            // Create product cards
+            filteredProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.setAttribute('data-price', product.price);
+                card.setAttribute('data-brand', product.brand);
+                card.setAttribute('data-category', product.category);
+                card.setAttribute('data-collection', product.collection.replace(/ /g, '-'));
+                card.setAttribute('data-sizes', product.sizes.join(','));
+                if (product.new) card.setAttribute('data-new', 'true');
+                
+                card.innerHTML = `
+                    ${product.new ? '<div class="product-tag new">New</div>' : ''}
+                    <div class="product-category-tag${product.category === 'unisex' ? ' unisex' : ''}">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
+                    <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <div class="price">₹${product.price}</div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn quick-view-btn">Quick View</button>
+                    </div>
+                `;
+                
+                productsGrid.appendChild(card);
+                console.log(`DIRECT FIX: Added product card for ${product.name}`);
+            });
+            
+            // Ensure grid is visible
+            productsGrid.style.display = 'grid';
+            
+            // Apply sorting
+            const sortSelect = document.getElementById('sort-select');
+            if (sortSelect) {
+                sortProducts(sortSelect.value || 'new');
+            }
+            
+            // Re-initialize quick view
+            setupQuickView();
         }
-        
-        // Re-initialize quick view
-        setupQuickView();
     }
     
     // Clear filters

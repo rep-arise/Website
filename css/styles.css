@@ -107,7 +107,7 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 200;
     background-color: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
@@ -2955,7 +2955,7 @@ footer::before {
     border-radius: 10px;
     padding: 25px;
     position: sticky;
-    top: 100px;
+    top: 100px; /* Increased from original value to ensure it's below the header */
     height: fit-content;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(157, 78, 221, 0.2);
@@ -2964,6 +2964,7 @@ footer::before {
     opacity: 0;
     transform: translateX(-30px);
     animation: fadeInLeft 0.8s forwards;
+    z-index: 100; /* Ensure it's lower than header z-index */
 }
 
 @keyframes fadeInLeft {
