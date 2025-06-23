@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <img src="${imagePath}" alt="${product.name}" loading="lazy">
                         <div class="product-info">
                             <h3>${product.name}</h3>
-                            <div class="price">$${product.price}</div>
+                            <div class="price">₹${product.price}</div>
                         </div>
                         <div class="product-actions">
                             <button class="btn quick-view-btn">Quick View</button>
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const productImage = card.querySelector('img');
                 modalImage.src = productImage.src;
                 modalTitle.textContent = card.querySelector('h3').textContent;
-                modalPrice.textContent = '$' + card.getAttribute('data-price');
+                modalPrice.textContent = '₹' + card.getAttribute('data-price');
                 
                 // Set description based on product type
                 const productName = card.querySelector('h3').textContent;

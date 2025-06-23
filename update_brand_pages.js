@@ -6,56 +6,56 @@
 const fs = require('fs');
 const path = require('path');
 
-// List of all brand HTML files
-const brandFiles = [
+// List of brand pages
+const brandPages = [
   'adidas.html',
   'asics.html',
   'converse.html',
   'jordan.html',
   'new-balance.html',
-  'nike.html', // Already updated, but including for completeness
+  'nike.html',
   'puma.html',
   'reebok.html'
 ];
 
-// Function to update a brand page
+// Function to update a single brand page
 function updateBrandPage(brandFile) {
   const filePath = path.join(__dirname, 'brands', brandFile);
   
-  try {
-    let content = fs.readFileSync(filePath, 'utf8');
+  // Read the file
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(`Error reading ${brandFile}:`, err);
+      return;
+    }
     
-    // Add brands-page class to body tag
-    content = content.replace(/<body>/, '<body class="brands-page">');
+    // Replace dollar signs with rupee symbol in price inputs
+    let updatedData = data.replace(
+      /<span>\$<\/span>/g, 
+      '<span>₹</span>'
+    );
     
-    // Find the position of the filter sidebar
-    const filterSidebarStart = content.indexOf('<!-- Filter Sidebar -->');
-    const filterSidebarEnd = content.indexOf('</aside>', filterSidebarStart) + '</aside>'.length;
-    
-    // Extract the filter sidebar content
-    const filterSidebarContent = content.substring(filterSidebarStart, filterSidebarEnd);
-    
-    // Remove the filter sidebar from its original position
-    content = content.substring(0, filterSidebarStart) + content.substring(filterSidebarEnd);
-    
-    // Find the position where we need to insert the filter sidebar
-    const shopGridStart = content.indexOf('<div class="shop-grid">');
-    const shopGridContentStart = shopGridStart + '<div class="shop-grid">'.length;
-    
-    // Insert the filter sidebar at the beginning of the shop grid
-    content = content.substring(0, shopGridContentStart) + '\n                    ' + 
-              filterSidebarContent + '\n\n                    ' + 
-              content.substring(shopGridContentStart);
+    // Replace dollar signs with rupee symbol in modal price
+    updatedData = updatedData.replace(
+      /<p class="modal-price">\$(\d+\.\d+)<\/p>/g, 
+      '<p class="modal-price">₹$1</p>'
+    );
     
     // Write the updated content back to the file
-    fs.writeFileSync(filePath, content, 'utf8');
-    console.log(`Updated ${brandFile} successfully.`);
-  } catch (error) {
-    console.error(`Error updating ${brandFile}:`, error);
-  }
+    fs.writeFile(filePath, updatedData, 'utf8', (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing to ${brandFile}:`, writeErr);
+        return;
+      }
+      console.log(`Successfully updated ${brandFile}`);
+    });
+  });
 }
-    
+
 // Update all brand pages
-brandFiles.forEach(updateBrandPage);
+console.log('Starting to update brand pages...');
+brandPages.forEach(brandFile => {
+  updateBrandPage(brandFile);
+});
 
 console.log('All brand pages updated successfully!'); 

@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <img src="${product.image}" alt="${product.name}" loading="lazy">
                     <div class="product-info">
                         <h3>${product.name}</h3>
-                        <div class="price">$${product.price}</div>
+                        <div class="price">₹${product.price}</div>
                     </div>
                     <div class="product-actions">
                         <button class="btn quick-view-btn">Quick View</button>
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Update modal content
                 quickViewModal.querySelector('.modal-title').textContent = productName;
-                quickViewModal.querySelector('.modal-price').textContent = '$' + productPrice;
+                quickViewModal.querySelector('.modal-price').textContent = '₹' + productPrice;
                 quickViewModal.querySelector('.modal-image img').src = productImage;
                 quickViewModal.querySelector('.modal-description').textContent = 
                     `Experience premium quality with our 1:1 replica of the ${productName}. Perfect craftsmanship, premium materials, and unbeatable comfort.`;
