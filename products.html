@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Rep Arise</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="images/lo.png" alt="Rep Arise Logo">
+                </div>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#" class="active">Shop</a></li>
+                    <li><a href="index.html#contact">About</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+                <div class="nav-icons">
+                    <!-- Cart and wishlist icons removed -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay"></div>
+
+    <!-- Filter Overlay -->
+    <div class="filter-overlay"></div>
+
+    <main>
+        <!-- Shop Header -->
+        <section class="shop-header">
+            <div class="container">
+                <h1>Shop Our Collection</h1>
+                <p>Discover premium 1:1 replica sneakers at affordable prices</p>
+            </div>
+        </section>
+
+        <!-- Shop Content -->
+        <section class="shop-content">
+            <div class="container">
+                <div class="shop-grid">
+                    <!-- Filter Sidebar -->
+                    <aside class="filter-sidebar">
+                        <div class="filter-header">
+                            <h3>Filter Products</h3>
+                            <button class="mobile-filter-close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Brand</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="nike">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Nike</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="adidas">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Adidas</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="jordan">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Jordan</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="new-balance">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">New Balance</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="puma">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Puma</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="reebok">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Reebok</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="asics">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Asics</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="converse">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Converse</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="brand" value="onitsuka-tiger">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Onitsuka Tiger</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Category</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="category" value="men">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Men</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="category" value="women">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">Women</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Size (UK)</h4>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-3">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 3 (EU 36)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-4">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 4 (EU 37)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-5">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 5 (EU 38)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-6">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 6 (EU 39/41)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-7">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 7 (EU 40/42)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-8">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 8 (EU 43)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-9">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 9 (EU 44)</span>
+                                </label>
+                                <label class="filter-option">
+                                    <input type="checkbox" name="size" value="uk-10">
+                                    <span class="checkmark"></span>
+                                    <span class="option-text">UK 10 (EU 45)</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <h4>Price Range</h4>
+                            <div class="price-range">
+                                <input type="range" min="50" max="200" value="50" class="price-slider" id="min-price">
+                                <input type="range" min="50" max="200" value="200" class="price-slider" id="max-price">
+                                <div class="price-inputs">
+                                    <div class="price-input">
+                                        <span>$</span>
+                                        <input type="number" value="50" min="50" max="200" id="min-price-input">
+                                    </div>
+                                    <span>-</span>
+                                    <div class="price-input">
+                                        <span>$</span>
+                                        <input type="number" value="200" min="50" max="200" id="max-price-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn apply-filter">Apply Filter</button>
+                        <button class="btn clear-filter">Clear All</button>
+                    </aside>
+
+                    <!-- Product Listing -->
+                    <div class="product-listing">
+                        <div class="product-controls">
+                            <button class="mobile-filter-toggle">
+                                <i class="fas fa-filter"></i>
+                                Filters
+                            </button>
+                            <div class="product-sort">
+                                <label for="sort-select">Sort by:</label>
+                                <select id="sort-select">
+                                    <option value="new">Newest</option>
+                                    <option value="low-high">Price: Low to High</option>
+                                    <option value="high-low">Price: High to Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="products-grid">
+                            <!-- Product cards will be rendered here by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-about-us">
+                    <h3>About Us</h3>
+                    <h3 class="footer-brand">Rep Arise</h3>
+                    <p class="footer-tagline">Summon Your Style: Discover Your Next Pair</p>
+                    <p class="footer-description">High-quality 1:1 replica sneakers with fast delivery and affordable prices.</p>
+                    <p class="footer-description">We are a team of sneaker enthusiasts who are passionate about providing the best replica sneakers to our customers.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fab fa-instagram"></i> <a href="https://instagram.com/rep.arise" target="_blank">@rep.arise</a></li>
+                        <li><i class="fab fa-telegram"></i> <a href="https://t.me/rep_arise" target="_blank">@rep_arise</a></li>
+                        <li><i class="fab fa-reddit"></i> <a href="https://reddit.com/u/Comfortable-Fox-8254" target="_blank">u/Comfortable-Fox-8254</a></li>
+                        <li class="email-contact"><i class="far fa-envelope"></i> <a href="mailto:rep.arise.sneakers@gmail.com" title="rep.arise.sneakers@gmail.com">rep.arise.sneakers@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Rep Arise. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Product Quick View Modal -->
+    <div class="quick-view-modal">
+        <div class="modal-content">
+            <button class="close-modal"><i class="fas fa-times"></i></button>
+            <div class="modal-grid">
+                <div class="modal-image">
+                    <img src="" alt="Product Image">
+                </div>
+                <div class="modal-info">
+                    <h2 class="modal-title"></h2>
+                    <div class="modal-price"></div>
+                    <p class="modal-description"></p>
+                    <div class="size-selector">
+                        <p>Select Size:</p>
+                        <div class="size-options">
+                            <!-- Size buttons will be dynamically added here -->
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <!-- Cart and wishlist buttons removed -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMERGENCY FIX: Must be loaded first -->
+    <script src="js/emergency-fix.js"></script>
+
+    <script src="js/app.js"></script>
+    <script src="js/fix-products.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/debug-products.js"></script>
+    <script src="js/search.js"></script>
+</body>
+</html>

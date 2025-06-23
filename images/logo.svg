@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="60" viewBox="0 0 200 60">
+  <defs>
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9d4edd" />
+      <stop offset="100%" stop-color="#e0aaff" />
+    </linearGradient>
+  </defs>
+  <text x="10" y="40" font-family="Arial, sans-serif" font-weight="bold" font-size="28" fill="url(#logo-gradient)">REP ARISE</text>
+  <path d="M180,20 L190,10 L190,30 Z" fill="#9d4edd" />
+  <path d="M10,50 C10,50 30,45 100,45 C170,45 190,50 190,50" stroke="#7b2cbf" stroke-width="2" fill="none" />
+</svg> 

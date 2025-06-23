@@ -1,0 +1,432 @@
+[
+  {
+    "name": "Nike Air Max 90 Infrared",
+    "brand": "nike",
+    "collection": "Air Max",
+    "price": 3699,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Max 270 Pulse Phantom Dust",
+    "brand": "nike",
+    "collection": "Air Max",
+    "price": 3499,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Max 270 Pulse Black Laser",
+    "brand": "nike",
+    "collection": "Air Max",
+    "price": 3499,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Max 1 '87 Luxe University of Oregon PE",
+    "brand": "nike",
+    "collection": "Air Max",
+    "price": 3999,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Max 90 Triple Black",
+    "brand": "nike",
+    "collection": "Air Max",
+    "price": 3899,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Force 1 '07 Triple White",
+    "brand": "nike",
+    "collection": "Air Force",
+    "price": 2699,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike SB Dunk Low Panda",
+    "brand": "nike",
+    "collection": "SB Dunk",
+    "price": 3299,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Blazer Mid '77 Vintage White",
+    "brand": "nike",
+    "collection": "Blazer",
+    "price": 4099,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Force 1 x Ambush White",
+    "brand": "nike",
+    "collection": "Air Force",
+    "price": 3899,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Air Force 1 x Ambush Black",
+    "brand": "nike",
+    "collection": "Air Force",
+    "price": 3899,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan 1 Low x Travis Scott Fragment",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3799,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan 1 Low x Travis Scott Reverse Mocha",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3999,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan 1 Low x Travis Scott Mocha",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3999,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan 1 Low x Travis Scott Olive",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3999,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan 1 Low x Travis Scott Black Phantom",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3999,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan 1 High University Blue",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3799,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan Retro 4 Pine Green",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 4199,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan Retro 4 Kaws Cool Grey Glow in Dark",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 4699,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan Retro 4 Black Cat",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 4199,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan Retro 1 High Off White Chicago",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3899,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan 1 High Across the Spider-Verse/Next Chapter",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 4199,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike Air Jordan Retro 1 High Taxi Yellow",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3899,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Nike SB Dunk Low x The Wizard of Oz Poppy Filled",
+    "brand": "nike",
+    "collection": "SB Dunk",
+    "price": 3999,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Air Jordan Retro 1 Satin Shadow",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3599,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Air Force 1 Low GS Unlock Your Space",
+    "brand": "nike",
+    "collection": "Air Force",
+    "price": 3399,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike SB Dunk Low x Supreme Ocean Fog",
+    "brand": "nike",
+    "collection": "SB Dunk",
+    "price": 3799,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike SB Dunk Low Year of the Snake",
+    "brand": "nike",
+    "collection": "SB Dunk",
+    "price": 3899,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Pegasus Trail 5 Black Wolf Grey",
+    "brand": "nike",
+    "collection": "Pegasus",
+    "price": 3799,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike SB Dunk Low x Riot",
+    "brand": "nike",
+    "collection": "SB Dunk",
+    "price": 3799,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Air Force 1 '07 LV8 Low Pure Platinum Light Carbon",
+    "brand": "nike",
+    "collection": "Air Force",
+    "price": 3499,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Air Max 1 Low Poly Big Head",
+    "brand": "nike",
+    "collection": "Air Max",
+    "price": 3799,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike SB Dunk Low Friends and Family",
+    "brand": "nike",
+    "collection": "SB Dunk",
+    "price": 3699,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Air Force 1 '07 LV8 Low Pop Art",
+    "brand": "nike",
+    "collection": "Air Force",
+    "price": 3699,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Field General x Union LA Ivory",
+    "brand": "nike",
+    "collection": "Field General",
+    "price": 3899,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Journey Run White Barely Volt",
+    "brand": "nike",
+    "collection": "Journey Run",
+    "price": 3699,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Nike Air Jordan 1 Low Black Myth Wukong",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3999,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Adidas Ultraboost 21",
+    "brand": "adidas",
+    "collection": "Ultraboost",
+    "price": 130,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-2.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Jordan 4 Retro",
+    "brand": "jordan",
+    "collection": "Retro",
+    "price": 150,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-7.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Puma Suede Classic",
+    "brand": "puma",
+    "collection": "Suede",
+    "price": 95,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-8.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Reebok Classic Leather",
+    "brand": "reebok",
+    "collection": "Classic",
+    "price": 90,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "New Balance 574",
+    "brand": "new-balance",
+    "collection": "574",
+    "price": 110,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-2.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Asics Gel-Lyte III",
+    "brand": "asics",
+    "collection": "Gel-Lyte",
+    "price": 115,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-7.svg",
+    "category": "men",
+    "new": false
+  },
+  {
+    "name": "Converse Chuck Taylor All Star",
+    "brand": "converse",
+    "collection": "Chuck Taylor",
+    "price": 80,
+    "sizes": ["6", "7", "8", "9", "10"],
+    "image": "images/product-8.svg",
+    "category": "men",
+    "new": false
+  }
+] 

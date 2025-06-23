@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <defs>
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9d4edd" />
+      <stop offset="100%" stop-color="#e0aaff" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Circle Border -->
+  <circle cx="150" cy="150" r="140" fill="none" stroke="url(#logo-gradient)" stroke-width="3" />
+  
+  <!-- Sneaker Icon -->
+  <path d="M150,220 L220,200 L220,120 L190,100 L110,100 L80,120 L80,200 L150,220 Z" fill="#240046" stroke="#5a189a" stroke-width="4"/>
+  <path d="M150,200 L200,185 L200,130 L180,115 L120,115 L100,130 L100,185 L150,200 Z" fill="#3c096c" stroke="#7b2cbf" stroke-width="2"/>
+  <path d="M150,100 L150,70 L130,80 L110,100 Z" fill="#5a189a" stroke="#7b2cbf" stroke-width="2"/>
+  <path d="M150,100 L150,70 L170,80 L190,100 Z" fill="#5a189a" stroke="#7b2cbf" stroke-width="2"/>
+  
+  <!-- Sword -->
+  <path d="M220,60 L220,160 L230,170 L210,170 L220,160" fill="none" stroke="url(#logo-gradient)" stroke-width="3" />
+  <rect x="215" y="60" width="10" height="60" fill="url(#logo-gradient)" />
+  <path d="M200,60 L240,60" stroke="url(#logo-gradient)" stroke-width="3" />
+  
+  <!-- Flames -->
+  <path d="M80,200 C90,190 100,210 110,200 C120,190 130,210 140,200 C150,190 160,210 170,200 C180,190 190,210 200,200 C210,190 220,210 230,200" fill="none" stroke="url(#logo-gradient)" stroke-width="2" />
+  
+  <!-- Text -->
+  <text x="150" y="270" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="url(#logo-gradient)" text-anchor="middle" filter="url(#glow)">REP ARISE</text>
+</svg> 

@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Nike SB Dunk Low Metallic Gold",
+    "brand": "nike",
+    "collection": "SB Dunk",
+    "price": 3399,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-5.svg",
+    "category": "unisex",
+    "new": true
+  },
+  {
+    "name": "Converse Chuck 70 High",
+    "brand": "converse",
+    "collection": "Chuck 70",
+    "price": 85,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-5.svg",
+    "category": "unisex",
+    "new": true
+  },
+  {
+    "name": "Vans Old Skool",
+    "brand": "vans",
+    "collection": "Classic",
+    "price": 75,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-6.svg",
+    "category": "unisex",
+    "new": false
+  },
+  {
+    "name": "Nike Blazer Mid '77",
+    "brand": "nike",
+    "collection": "Blazer",
+    "price": 100,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/man/airmax90infraredjpg.jpg",
+    "category": "unisex",
+    "new": false
+  },
+  {
+    "name": "Adidas Gazelle",
+    "brand": "adidas",
+    "collection": "Gazelle",
+    "price": 95,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-6.svg",
+    "category": "unisex",
+    "new": true
+  },
+  {
+    "name": "Jordan 1 Mid",
+    "brand": "jordan",
+    "collection": "Jordan 1",
+    "price": 120,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-5.svg",
+    "category": "unisex",
+    "new": false
+  },
+  {
+    "name": "Puma Future Rider",
+    "brand": "puma",
+    "collection": "Future Rider",
+    "price": 90,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-6.svg",
+    "category": "unisex",
+    "new": true
+  },
+  {
+    "name": "Reebok Club C 85",
+    "brand": "reebok",
+    "collection": "Club C",
+    "price": 85,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-5.svg",
+    "category": "unisex",
+    "new": false
+  },
+  {
+    "name": "New Balance 550",
+    "brand": "new-balance",
+    "collection": "550",
+    "price": 110,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-6.svg",
+    "category": "unisex",
+    "new": true
+  },
+  {
+    "name": "Asics Gel-1130",
+    "brand": "asics",
+    "collection": "Gel-1130",
+    "price": 100,
+    "sizes": ["3", "4", "5", "6", "7", "8", "9", "10"],
+    "image": "images/product-5.svg",
+    "category": "unisex",
+    "new": false
+  }
+] 

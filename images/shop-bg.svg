@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="400" viewBox="0 0 1920 400">
+  <rect width="1920" height="400" fill="#10002b"/>
+  
+  <!-- Background Pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="none" stroke="#5a189a" stroke-width="0.5" opacity="0.2"/>
+    </pattern>
+    
+    <radialGradient id="glow" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#7b2cbf" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#10002b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Grid Pattern -->
+  <rect width="1920" height="400" fill="url(#grid)"/>
+  
+  <!-- Center Glow -->
+  <circle cx="960" cy="200" r="300" fill="url(#glow)"/>
+  
+  <!-- Sneaker Silhouettes -->
+  <path d="M400,250 L500,230 L500,150 L480,130 L320,130 L300,150 L300,230 L400,250 Z" fill="none" stroke="#9d4edd" stroke-width="2" opacity="0.3"/>
+  
+  <ellipse cx="700" cy="200" rx="80" ry="20" fill="none" stroke="#7b2cbf" stroke-width="2" opacity="0.3"/>
+  <path d="M650,200 C650,170 670,140 700,140 C730,140 750,170 750,200" fill="none" stroke="#7b2cbf" stroke-width="2" opacity="0.3"/>
+  
+  <rect x="900" y="220" width="120" height="20" rx="10" ry="10" fill="none" stroke="#9d4edd" stroke-width="2" opacity="0.3"/>
+  <path d="M910,220 L910,160 L1010,160 L1010,220" fill="none" stroke="#9d4edd" stroke-width="2" opacity="0.3"/>
+  
+  <path d="M1200,250 L1300,230 L1300,150 L1280,130 L1120,130 L1100,150 L1100,230 L1200,250 Z" fill="none" stroke="#9d4edd" stroke-width="2" opacity="0.3"/>
+  
+  <ellipse cx="1500" cy="200" rx="80" ry="20" fill="none" stroke="#7b2cbf" stroke-width="2" opacity="0.3"/>
+  <path d="M1450,200 C1450,170 1470,140 1500,140 C1530,140 1550,170 1550,200" fill="none" stroke="#7b2cbf" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Abstract Shapes -->
+  <circle cx="200" cy="100" r="50" fill="#3c096c" opacity="0.2"/>
+  <circle cx="1700" cy="300" r="70" fill="#5a189a" opacity="0.2"/>
+  <circle cx="1300" cy="80" r="40" fill="#7b2cbf" opacity="0.2"/>
+  <circle cx="600" cy="320" r="60" fill="#9d4edd" opacity="0.2"/>
+  
+  <!-- Lines -->
+  <line x1="0" y1="200" x2="1920" y2="200" stroke="#7b2cbf" stroke-width="1" opacity="0.2"/>
+</svg> 

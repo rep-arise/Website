@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Nike Air Jordan Retro 4 Forget Me Not",
+    "brand": "nike",
+    "collection": "Air Jordan",
+    "price": 3599,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-1.svg",
+    "category": "women",
+    "new": true
+  },
+  {
+    "name": "Nike Air Force 1 Low SE Mettalic Zinc",
+    "brand": "nike",
+    "collection": "Air Force",
+    "price": 3299,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-1.svg",
+    "category": "men",
+    "new": true
+  },
+  {
+    "name": "Adidas NMD R1",
+    "brand": "adidas",
+    "collection": "NMD",
+    "price": 140,
+    "sizes": [],
+    "image": "images/product-4.svg",
+    "category": "women",
+    "new": false
+  },
+  {
+    "name": "Jordan 1 Low",
+    "brand": "jordan",
+    "collection": "Jordan 1",
+    "price": 125,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-3.svg",
+    "category": "women",
+    "new": true
+  },
+  {
+    "name": "Puma Cali Sport",
+    "brand": "puma",
+    "collection": "Cali",
+    "price": 100,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-4.svg",
+    "category": "women",
+    "new": false
+  },
+  {
+    "name": "Reebok Princess",
+    "brand": "reebok",
+    "collection": "Princess",
+    "price": 85,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-3.svg",
+    "category": "women",
+    "new": false
+  },
+  {
+    "name": "New Balance 327",
+    "brand": "new-balance",
+    "collection": "327",
+    "price": 120,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-4.svg",
+    "category": "women",
+    "new": true
+  },
+  {
+    "name": "Asics Gel-Kayano",
+    "brand": "asics",
+    "collection": "Gel-Kayano",
+    "price": 130,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-3.svg",
+    "category": "women",
+    "new": false
+  },
+  {
+    "name": "Converse Platform Chuck Taylor",
+    "brand": "converse",
+    "collection": "Platform",
+    "price": 90,
+    "sizes": ["3", "4", "5", "6", "7"],
+    "image": "images/product-4.svg",
+    "category": "women",
+    "new": true
+  }
+] 

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect width="1920" height="1080" fill="#10002b"/>
+  
+  <!-- Background Pattern -->
+  <defs>
+    <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="none" stroke="#5a189a" stroke-width="0.5" opacity="0.2"/>
+    </pattern>
+    
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#9d4edd" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#10002b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Grid Pattern -->
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  
+  <!-- Center Glow -->
+  <circle cx="960" cy="540" r="500" fill="url(#glow)"/>
+  
+  <!-- Sneaker Silhouettes -->
+  <path d="M500,700 L700,650 L700,500 L650,450 L350,450 L300,500 L300,650 L500,700 Z" fill="#240046" stroke="#5a189a" stroke-width="2" opacity="0.3"/>
+  
+  <path d="M1200,600 C1200,500 1250,400 1400,400 C1550,400 1600,500 1600,600" fill="none" stroke="#7b2cbf" stroke-width="4" opacity="0.3"/>
+  
+  <!-- Abstract Shapes -->
+  <circle cx="300" cy="300" r="100" fill="#3c096c" opacity="0.2"/>
+  <circle cx="1600" cy="800" r="150" fill="#5a189a" opacity="0.2"/>
+  <circle cx="1200" cy="200" r="80" fill="#7b2cbf" opacity="0.2"/>
+  <circle cx="800" cy="900" r="120" fill="#9d4edd" opacity="0.2"/>
+  
+  <!-- Lines -->
+  <line x1="0" y1="540" x2="1920" y2="540" stroke="#7b2cbf" stroke-width="1" opacity="0.2"/>
+  <line x1="960" y1="0" x2="960" y2="1080" stroke="#7b2cbf" stroke-width="1" opacity="0.2"/>
+</svg> 

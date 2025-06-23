@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="600" viewBox="0 0 1920 600">
+  <rect width="1920" height="600" fill="#10002b"/>
+  
+  <!-- Background Pattern -->
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="none" stroke="#5a189a" stroke-width="0.5" opacity="0.2"/>
+    </pattern>
+    
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7b2cbf" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#10002b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Grid Pattern -->
+  <rect width="1920" height="600" fill="url(#grid)"/>
+  
+  <!-- Diagonal Glow -->
+  <polygon points="0,0 1920,0 1920,600" fill="url(#glow)"/>
+  
+  <!-- Abstract Shapes -->
+  <circle cx="200" cy="300" r="80" fill="#3c096c" opacity="0.2"/>
+  <circle cx="1700" cy="200" r="100" fill="#5a189a" opacity="0.2"/>
+  <circle cx="1500" cy="500" r="60" fill="#7b2cbf" opacity="0.2"/>
+  <circle cx="400" cy="100" r="50" fill="#9d4edd" opacity="0.2"/>
+  
+  <!-- Sneaker Silhouettes -->
+  <path d="M800,400 L900,380 L900,300 L880,280 L720,280 L700,300 L700,380 L800,400 Z" fill="none" stroke="#9d4edd" stroke-width="2" opacity="0.3"/>
+  
+  <ellipse cx="1200" cy="350" rx="100" ry="30" fill="none" stroke="#7b2cbf" stroke-width="2" opacity="0.3"/>
+  <path d="M1150,350 C1150,320 1170,290 1200,290 C1230,290 1250,320 1250,350" fill="none" stroke="#7b2cbf" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Lines -->
+  <line x1="0" y1="300" x2="1920" y2="300" stroke="#7b2cbf" stroke-width="1" opacity="0.2"/>
+</svg> 
