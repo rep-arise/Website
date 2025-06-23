@@ -1,0 +1,74 @@
+/* Critical grid layout fix */
+
+/* Ensure products grid is properly displayed */
+.products-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+    max-height: none !important; /* Remove any height constraints */
+    overflow: visible !important; /* Ensure overflow content is visible */
+    min-height: 400px; /* Ensure grid has minimum height */
+    width: 100% !important;
+    opacity: 1 !important; /* Ensure grid is visible */
+    transform: none !important; /* Remove any transforms that might affect layout */
+}
+
+/* Ensure product cards are properly displayed */
+.product-card {
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    position: relative !important;
+    height: auto !important;
+    min-height: 350px !important;
+    overflow: visible !important;
+    z-index: 1 !important;
+}
+
+/* Fix product card visibility when filtered */
+.product-card[data-brand="nike"] {
+    border: 1px solid rgba(157, 78, 221, 0.4) !important;
+}
+
+/* Media queries to ensure responsive behavior */
+@media (max-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+}
+
+/* Fix for product listing container */
+.product-listing {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    display: block !important;
+}
+
+/* Debug styles to highlight elements */
+.debug-highlight {
+    border: 2px solid red !important;
+    position: relative !important;
+}
+
+.debug-highlight::before {
+    content: attr(data-brand);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: red;
+    color: white;
+    padding: 2px 5px;
+    font-size: 12px;
+    z-index: 100;
+} 
