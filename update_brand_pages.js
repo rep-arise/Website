@@ -1,78 +1,61 @@
 /**
- * UPDATE BRAND PAGES
- * 
- * This script updates all brand-specific HTML pages to include the new filtering scripts.
- * It ensures consistent script loading across all pages.
+ * Script to update all brand pages by removing demo products
+ * Run this script with Node.js
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// Define the brand pages directory
-const brandsDir = path.join(__dirname, 'brands');
+// List of brand pages
+const brandPages = [
+  'adidas.html',
+  'asics.html',
+  'converse.html',
+  'jordan.html',
+  'new-balance.html',
+  'nike.html',
+  'puma.html',
+  'reebok.html'
+];
 
-// Get all HTML files in the brands directory
-const brandFiles = fs.readdirSync(brandsDir)
-    .filter(file => file.endsWith('.html'));
-
-console.log(`Found ${brandFiles.length} brand HTML files to update.`);
-
-// The scripts section to replace in each file
-const oldScriptPattern = /<!-- CRITICAL FIXES[\s\S]*?<\/body>/;
-
-// The new scripts to insert
-const newScripts = `<!-- CRITICAL FIXES - DO NOT REMOVE -->
-    <link rel="stylesheet" href="../css/grid-fix.css">
-    <script src="../js/currency-fix.js"></script>
-    <script src="../js/filter-fix.js"></script>
+// Function to update a single brand page
+function updateBrandPage(brandFile) {
+  const filePath = path.join(__dirname, 'brands', brandFile);
+  
+  // Read the file
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(`Error reading ${brandFile}:`, err);
+      return;
+    }
     
-    <!-- CRITICAL BRAND FILTER FIX - AGGRESSIVE VERSION -->
-    <script src="../js/product-card-fix.js"></script>
-    <script src="../js/direct-brand-filter.js"></script>
-    <script src="../js/brand-filter-fix.js"></script>
+    // Replace dollar signs with rupee symbol in price inputs
+    let updatedData = data.replace(
+      /<span>\$<\/span>/g, 
+      '<span>₹</span>'
+    );
     
-    <!-- CRITICAL: Load cache-buster first to prevent caching of other scripts -->
-    <script src="../js/cache-buster.js"></script>
-    <script src="../js/cache-buster-sw.js"></script>
-</body>`;
-
-// Add cache control meta tags
-const headPattern = /<head>[\s\S]*?<\/head>/;
-const cacheControlMeta = `<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>$BRAND_NAME Collection - Rep Arise</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/grid-fix.css">
-    <!-- CRITICAL: Prevent caching -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-</head>`;
-
-// Process each brand file
-brandFiles.forEach(file => {
-    const filePath = path.join(brandsDir, file);
-    
-    // Extract brand name from filename
-    const brandName = file.replace('.html', '');
-    const brandNameCapitalized = brandName.charAt(0).toUpperCase() + brandName.slice(1);
-    
-    // Read the file content
-    let content = fs.readFileSync(filePath, 'utf8');
-    
-    // Replace the head section to add cache control
-    content = content.replace(headPattern, cacheControlMeta.replace('$BRAND_NAME', brandNameCapitalized));
-    
-    // Replace the scripts section
-    content = content.replace(oldScriptPattern, newScripts);
+    // Replace dollar signs with rupee symbol in modal price
+    updatedData = updatedData.replace(
+      /<p class="modal-price">\$(\d+\.\d+)<\/p>/g, 
+      '<p class="modal-price">₹$1</p>'
+    );
     
     // Write the updated content back to the file
-    fs.writeFileSync(filePath, content);
+    fs.writeFile(filePath, updatedData, 'utf8', (writeErr) => {
+      if (writeErr) {
+        console.error(`Error writing to ${brandFile}:`, writeErr);
+        return;
+      }
+      console.log(`Successfully updated ${brandFile}`);
+    });
+  });
+}
     
-    console.log(`Updated ${file}`);
+// Update all brand pages
+console.log('Starting to update brand pages...');
+brandPages.forEach(brandFile => {
+  updateBrandPage(brandFile);
 });
 
 console.log('All brand pages updated successfully!'); 

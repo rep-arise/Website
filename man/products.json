@@ -222,7 +222,7 @@
   {
     "name": "Nike SB Dunk Low x The Wizard of Oz Poppy Filled",
     "brand": "nike",
-    "collection": "SB Dunk",
+    "collection": "sb-dunk",
     "price": 3999,
     "sizes": ["6", "7", "8", "9", "10"],
     "image": "images/product-1.svg",

@@ -51,7 +51,7 @@
                     const response = await fetch(url);
                     if (!response.ok) {
                         throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
-                    }
+                        }
                     return await response.json();
                 } catch (error) {
                     console.error(`DIRECT FIX: Error fetching ${url}:`, error);
@@ -461,45 +461,45 @@
         if (filteredProducts.length === 0) {
             console.log("DIRECT FIX: No products match the filter criteria");
         } else {
-            // Create product cards
-            filteredProducts.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.setAttribute('data-price', product.price);
-                card.setAttribute('data-brand', product.brand);
-                card.setAttribute('data-category', product.category);
-                card.setAttribute('data-collection', product.collection.replace(/ /g, '-'));
-                card.setAttribute('data-sizes', product.sizes.join(','));
-                if (product.new) card.setAttribute('data-new', 'true');
-                
-                card.innerHTML = `
-                    ${product.new ? '<div class="product-tag new">New</div>' : ''}
-                    <div class="product-category-tag${product.category === 'unisex' ? ' unisex' : ''}">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
-                    <img src="${product.image}" alt="${product.name}" loading="lazy">
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
+        // Create product cards
+        filteredProducts.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.setAttribute('data-price', product.price);
+            card.setAttribute('data-brand', product.brand);
+            card.setAttribute('data-category', product.category);
+            card.setAttribute('data-collection', product.collection.replace(/ /g, '-'));
+            card.setAttribute('data-sizes', product.sizes.join(','));
+            if (product.new) card.setAttribute('data-new', 'true');
+            
+            card.innerHTML = `
+                ${product.new ? '<div class="product-tag new">New</div>' : ''}
+                <div class="product-category-tag${product.category === 'unisex' ? ' unisex' : ''}">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
+                <div class="product-info">
+                    <h3>${product.name}</h3>
                         <div class="price">₹${product.price}</div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn quick-view-btn">Quick View</button>
-                    </div>
-                `;
-                
-                productsGrid.appendChild(card);
+                </div>
+                <div class="product-actions">
+                    <button class="btn quick-view-btn">Quick View</button>
+                </div>
+            `;
+            
+            productsGrid.appendChild(card);
                 console.log(`DIRECT FIX: Added product card for ${product.name}`);
-            });
+        });
             
             // Ensure grid is visible
             productsGrid.style.display = 'grid';
-            
-            // Apply sorting
-            const sortSelect = document.getElementById('sort-select');
-            if (sortSelect) {
-                sortProducts(sortSelect.value || 'new');
-            }
-            
-            // Re-initialize quick view
-            setupQuickView();
+        
+        // Apply sorting
+        const sortSelect = document.getElementById('sort-select');
+        if (sortSelect) {
+            sortProducts(sortSelect.value || 'new');
+        }
+        
+        // Re-initialize quick view
+        setupQuickView();
         }
     }
     
