@@ -30,7 +30,7 @@
     z-index: 100 !important;
     height: fit-content !important;
     max-height: calc(100vh - 120px) !important;
-    overflow-y: auto !important;
+    overflow-y: visible !important;
 }
 
 /* Header z-index fix */
@@ -51,6 +51,7 @@ header, .main-header, nav, .nav-container {
         z-index: 1001 !important;
         transform: translateX(-100%) !important;
         transition: transform 0.3s ease-in-out !important;
+        overflow-y: auto !important;
     }
     
     .filter-sidebar.active {
