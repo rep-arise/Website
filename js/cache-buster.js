@@ -71,7 +71,7 @@
             if (!('serviceWorker' in navigator)) return;
 
             try {
-                const registration = await navigator.serviceWorker.register(CONFIG.swPath, { scope: '/' });
+                const registration = await navigator.serviceWorker.register('/cache-buster-sw.js', { scope: '/' });
                 console.log('[CACHE BUSTER] Service Worker registered with scope:', registration.scope);
                 
                 registration.update();
