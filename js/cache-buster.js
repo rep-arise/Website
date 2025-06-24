@@ -109,6 +109,7 @@
         },
 
         initDevTools() {
+            if (!this.isDevelopment()) return; // Only show in development
             // Dev mode indicator
             const indicator = dom.createElement('div');
             dom.addStyles(indicator, {
