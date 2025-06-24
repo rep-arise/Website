@@ -2446,7 +2446,7 @@ footer::before {
     box-shadow: var(--box-shadow);
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
-    overflow-y: auto;
+    overflow-y: hidden; /* Changed from auto to hidden to remove scrollbar */
     z-index: 1001;
 }
 
@@ -2478,6 +2478,7 @@ footer::before {
 @media (max-width: 992px) {
     .filter-sidebar {
         padding-top: 60px;
+        overflow-y: auto; /* Restore scrolling for mobile view only */
     }
 
     .mobile-filter-close {
@@ -2965,6 +2966,7 @@ footer::before {
     transform: translateX(-30px);
     animation: fadeInLeft 0.8s forwards;
     z-index: 100; /* Ensure it's lower than header z-index */
+    overflow: hidden; /* Add this to remove scrollbar in desktop view */
 }
 
 @keyframes fadeInLeft {
@@ -5058,7 +5060,7 @@ body, html {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 999;
+    z-index: 3; /* 999 to 3*/
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -5076,7 +5078,7 @@ body, html {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 3;
+    z-index: 998;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
