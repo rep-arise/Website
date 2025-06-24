@@ -7,9 +7,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/grid-fix.css">
-    <!-- CRITICAL: Checkbox fix CSS -->
-    <link rel="stylesheet" href="css/checkbox-fix.css">
+    <link rel="stylesheet" href="css/grid-fix.css">
 </head>
 <body>
     <header>
@@ -52,6 +50,7 @@
         <!-- Shop Content -->
         <section class="shop-content">
             <div class="container">
+                <h2 class="visually-hidden">Product Catalog</h2>
                 <div class="shop-grid">
                     <!-- Filter Sidebar -->
                     <aside class="filter-sidebar">
@@ -174,17 +173,19 @@
                         <div class="filter-group">
                             <h4>Price Range</h4>
                             <div class="price-range">
-                                <input type="range" min="50" max="200" value="50" class="price-slider" id="min-price">
-                                <input type="range" min="50" max="200" value="200" class="price-slider" id="max-price">
+                                <input type="range" min="0" max="20000" value="0" class="price-slider" id="min-price" aria-label="Minimum price">
+                                <input type="range" min="0" max="20000" value="20000" class="price-slider" id="max-price" aria-label="Maximum price">
                                 <div class="price-inputs">
                                     <div class="price-input">
+                                        <label for="min-price-input">Min:</label>
                                         <span>₹</span>
-                                        <input type="number" value="50" min="50" max="200" id="min-price-input">
+                                        <input type="number" value="0" min="0" max="20000" id="min-price-input">
                                     </div>
                                     <span>-</span>
                                     <div class="price-input">
+                                        <label for="max-price-input">Max:</label>
                                         <span>₹</span>
-                                        <input type="number" value="200" min="50" max="200" id="max-price-input">
+                                        <input type="number" value="20000" min="0" max="20000" id="max-price-input">
                                     </div>
                                 </div>
                             </div>
@@ -196,7 +197,7 @@
                     <!-- Product Listing -->
                     <div class="product-listing">
                         <div class="product-controls">
-                            <button class="mobile-filter-toggle">
+                            <button class="mobile-filter-toggle" aria-label="Toggle filter menu">
                                 <i class="fas fa-filter"></i>
                                 Filters
                             </button>
@@ -256,13 +257,13 @@
     <!-- Product Quick View Modal -->
     <div class="quick-view-modal">
         <div class="modal-content">
-            <button class="close-modal"><i class="fas fa-times"></i></button>
+            <button class="close-modal" aria-label="Close product details"><i class="fas fa-times"></i></button>
             <div class="modal-grid">
                 <div class="modal-image">
-                    <img src="" alt="Product Image">
+                    <img src="images/product-1.svg" alt="Product Image">
                 </div>
                 <div class="modal-info">
-                    <h2 class="modal-title"></h2>
+                    <h2 class="modal-title">Product Details</h2>
                     <div class="modal-price"></div>
                     <p class="modal-description"></p>
                     <div class="size-selector">
@@ -288,22 +289,9 @@
     <script src="js/debug-products.js"></script>
     <script src="js/search.js"></script>
     
-    <!-- Critical fixes for product filtering -->
-    <link rel="stylesheet" href="css/grid-fix.css">
-    <script src="js/deep-debug.js"></script>
-    <script src="js/direct-fix.js"></script>
-
     <!-- CRITICAL FIXES - DO NOT REMOVE -->
-    <link rel="stylesheet" href="css/grid-fix.css">
     <script src="js/currency-fix.js"></script>
     <script src="js/filter-fix.js"></script>
-    <!-- CRITICAL CHECKBOX FIX - Must be loaded after filter-fix.js -->
-    <script src="js/checkbox-fix.js"></script>
-    <!-- CRITICAL: Load cache-buster first to prevent caching of other scripts -->
     <script src="js/cache-buster.js"></script>
-    
-    <script src="/js/currency-fix.js"></script>
-    <script src="/js/filter-fix.js"></script>
-    <script src="/js/direct-fix.js"></script>
 </body>
 </html>

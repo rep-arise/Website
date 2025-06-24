@@ -2446,7 +2446,7 @@ footer::before {
     box-shadow: var(--box-shadow);
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
-    overflow-y: hidden; /* Changed from auto to hidden to remove scrollbar */
+    overflow-y: auto;
     z-index: 1001;
 }
 
@@ -2478,7 +2478,6 @@ footer::before {
 @media (max-width: 992px) {
     .filter-sidebar {
         padding-top: 60px;
-        overflow-y: auto; /* Restore scrolling for mobile view only */
     }
 
     .mobile-filter-close {
@@ -2536,7 +2535,7 @@ footer::before {
 .filter-options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .filter-option {
@@ -2546,32 +2545,42 @@ footer::before {
     cursor: pointer;
     transition: var(--transition);
     position: relative;
+    padding-left: 35px;
+    margin-bottom: 0;
+    min-height: 24px;
+    width: 100%;
 }
 
-.filter-option input {
+.filter-option input[type="checkbox"] {
     position: absolute;
     opacity: 0;
     cursor: pointer;
-    height: 0;
-    width: 0;
+    height: 20px;
+    width: 20px;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    z-index: 1;
 }
 
 .checkmark {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
     height: 20px;
     width: 20px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
     border: 1px solid rgba(157, 78, 221, 0.3);
+    pointer-events: none;
+    transition: all 0.2s ease;
 }
 
 .filter-option:hover .checkmark {
     background-color: rgba(157, 78, 221, 0.2);
+    border-color: var(--primary-color);
 }
 
 .filter-option input:checked ~ .checkmark {
@@ -2588,6 +2597,8 @@ footer::before {
     border: solid white;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
+    left: 7px;
+    top: 3px;
 }
 
 .filter-option input:checked ~ .checkmark:after {
@@ -2595,7 +2606,23 @@ footer::before {
 }
 
 .option-text {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    color: var(--white);
+    pointer-events: none;
+    padding-top: 2px;
+}
+
+/* Filter group spacing */
+.filter-group {
+    margin-bottom: 25px;
+    padding: 0 15px;
+}
+
+.filter-group h4 {
+    color: var(--light-color);
+    font-size: 1rem;
+    margin-bottom: 15px;
+    font-weight: 500;
 }
 
 .price-range {
@@ -2966,7 +2993,6 @@ footer::before {
     transform: translateX(-30px);
     animation: fadeInLeft 0.8s forwards;
     z-index: 100; /* Ensure it's lower than header z-index */
-    overflow: hidden; /* Add this to remove scrollbar in desktop view */
 }
 
 @keyframes fadeInLeft {
