@@ -1,0 +1,97 @@
+/**
+ * CRITICAL CHECKBOX FIX CSS
+ * 
+ * This CSS file fixes the styling of checkboxes in the filter sidebar
+ * to ensure they are clickable.
+ */
+
+/* Make checkboxes clickable */
+.filter-option input[type="checkbox"] {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 2 !important;
+    cursor: pointer !important;
+}
+
+/* Fix the checkmark styling */
+.filter-option .checkmark {
+    pointer-events: none !important;
+    z-index: 1 !important;
+}
+
+/* Fix label styling */
+.filter-option {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Fix option text styling */
+.filter-option .option-text {
+    pointer-events: none !important;
+}
+
+/* Fix filter options container */
+.filter-options {
+    pointer-events: auto !important;
+}
+
+/* Fix filter group */
+.filter-group {
+    pointer-events: auto !important;
+}
+
+/* Fix filter sidebar */
+.filter-sidebar {
+    pointer-events: auto !important;
+}
+
+/* Fix filter sidebar header */
+.filter-header {
+    pointer-events: auto !important;
+}
+
+/* Fix filter buttons */
+.filter-sidebar .btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Fix price range inputs */
+.price-range input[type="range"],
+.price-range input[type="number"] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Fix price input container */
+.price-inputs {
+    pointer-events: auto !important;
+}
+
+/* Fix price input */
+.price-input {
+    pointer-events: auto !important;
+}
+
+/* Fix custom checkbox styling */
+.filter-option input[type="checkbox"] + .checkmark {
+    background-color: transparent;
+}
+
+.filter-option input[type="checkbox"]:checked + .checkmark {
+    background-color: #007bff;
+}
+
+/* Fix hover effects */
+.filter-option:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Make sure the checkboxes are visible but still look nice */
+.filter-option input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 10px;
+    opacity: 0.5 !important;
+} 
