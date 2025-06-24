@@ -49,6 +49,10 @@
         },
 
         isDevelopment() {
+            // GitHub Pages uses rep-arise.github.io domain, which should be treated as production
+            if (window.location.hostname === 'rep-arise.github.io') {
+                return false;
+            }
             return CONFIG.devHosts.some(host => 
                 window.location.hostname === host || 
                 window.location.hostname.includes(host)
@@ -71,7 +75,18 @@
             if (!('serviceWorker' in navigator)) return;
 
             try {
-                const registration = await navigator.serviceWorker.register('/cache-buster-sw.js', { scope: '/' });
+                // Get the base path for the site - important for GitHub Pages
+                const basePath = window.location.pathname.replace(/\/[^\/]*$/, '/');
+                
+                // Adjust the service worker path and scope based on deployment environment
+                const swPath = window.location.hostname === 'rep-arise.github.io' 
+                    ? '/cache-buster-sw.js'  // Use root path for GitHub Pages
+                    : '/cache-buster-sw.js'; // Use root path for local development too
+                
+                const registration = await navigator.serviceWorker.register(swPath, { 
+                    scope: '/' // Always use root scope
+                });
+                
                 console.log('[CACHE BUSTER] Service Worker registered with scope:', registration.scope);
                 
                 registration.update();
