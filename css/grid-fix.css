@@ -30,7 +30,7 @@
     z-index: 100 !important;
     height: fit-content !important;
     max-height: calc(100vh - 120px) !important;
-    overflow-y: visible !important;
+    overflow: hidden !important;
 }
 
 /* Header z-index fix */
