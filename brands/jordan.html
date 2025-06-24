@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/styles.css?v=1.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/grid-fix.css">
 </head>
 <body class="brands-page">
     <header>
@@ -92,7 +93,27 @@
                     <input type="checkbox" name="collection" value="dunk">
                     <span class="checkmark"></span>
                     <span class="option-text">Dunk</span>
-                </label>
+                </label>The currency symbol issue is fixed. Thank you for resolving that.
+
+However, we are still facing TWO MAJOR UNRESOLVED ISSUES that require immediate and definitive fixes:
+
+CRITICAL: NIKE ONE-PRODUCT DISPLAY BUG (PERSISTENT):
+
+The problem is NOT fixed. When I select "Nike" in the filter (or any brand where I have multiple products), it still only shows ONE product, even though dozens are present in products.json and are visible on their respective brand pages.
+This is a fundamental failure of the filtering and display logic. You must find the root cause and ensure all matching products are correctly fetched and displayed in the product listing grid. This includes re-verifying the full data pipeline, state updates, and rendering loops as previously discussed.
+NEW ISSUE: DESKTOP FILTER PANE OVERLAYING HEADER:
+
+In the desktop view website (as seen in the provided image image_e28529.jpg), the "Filter Products" sidebar (filter pane) is now incorrectly overlaying (going underneath) the main website header (the top navigation bar with "Home, Shop, About, Contact").
+The filter sidebar should always appear below the main header, respecting its space, and not visually interfere with it. This is likely a z-index or position/layout conflict.
+You must fix BOTH of these issues immediately and in one go.
+
+Ensure that:
+
+The Nike one-product display bug is completely resolved, and all filtered products are correctly shown.
+The desktop filter pane no longer overlaps the main header; it should respect the header's height and position itself correctly below it.
+No unnecessary changes are made to any other element of any page.
+The mobile view functionality and styling are NOT negatively impacted by these desktop fixes.
+This situation demands your highest priority for a comprehensive resolution.
                 <label class="filter-option">
                     <input type="checkbox" name="collection" value="sb">
                     <span class="checkmark"></span>
@@ -288,5 +309,10 @@
     <link rel="stylesheet" href="../css/grid-fix.css">
     <script src="../js/currency-fix.js"></script>
     <script src="../js/filter-fix.js"></script>
+    <!-- CRITICAL BRAND FILTER FIX - MUST LOAD AFTER filter-fix.js -->
+    <script src="../js/brand-filter-fix.js"></script>
+    <script src="/js/currency-fix.js"></script>
+    <script src="/js/filter-fix.js"></script>
+    <script src="/js/direct-fix.js"></script>
 </body>
 </html>

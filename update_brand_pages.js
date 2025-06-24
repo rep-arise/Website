@@ -1,61 +1,63 @@
 /**
- * Script to update all brand pages by removing demo products
- * Run this script with Node.js
+ * Script to update all brand pages to include the brand-filter-fix.js script
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// List of brand pages
+// List of brand HTML files to update
 const brandPages = [
-  'adidas.html',
-  'asics.html',
-  'converse.html',
-  'jordan.html',
-  'new-balance.html',
-  'nike.html',
-  'puma.html',
-  'reebok.html'
+    'brands/adidas.html',
+    'brands/asics.html',
+    'brands/converse.html',
+    'brands/jordan.html',
+    'brands/new-balance.html',
+    'brands/nike.html',
+    'brands/puma.html',
+    'brands/reebok.html'
 ];
 
 // Function to update a single brand page
-function updateBrandPage(brandFile) {
-  const filePath = path.join(__dirname, 'brands', brandFile);
-  
-  // Read the file
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(`Error reading ${brandFile}:`, err);
-      return;
+function updateBrandPage(filePath) {
+    console.log(`Updating ${filePath}...`);
+    
+    try {
+        // Read the file content
+        let content = fs.readFileSync(filePath, 'utf8');
+        
+        // Check if the brand-filter-fix.js script is already included
+        if (content.includes('brand-filter-fix.js')) {
+            console.log(`  - brand-filter-fix.js already included in ${filePath}`);
+            return;
+        }
+        
+        // Find the position to insert the new script
+        const insertAfter = '<script src="../js/filter-fix.js"></script>';
+        const insertPosition = content.indexOf(insertAfter);
+        
+        if (insertPosition === -1) {
+            console.error(`  - Could not find insertion point in ${filePath}`);
+            return;
+        }
+        
+        // Insert the new script tag
+        const newScriptTag = `${insertAfter}
+    <!-- CRITICAL BRAND FILTER FIX - MUST LOAD AFTER filter-fix.js -->
+    <script src="../js/brand-filter-fix.js"></script>`;
+        
+        // Replace the old script tag with the new one (with our addition)
+        content = content.replace(insertAfter, newScriptTag);
+        
+        // Write the updated content back to the file
+        fs.writeFileSync(filePath, content, 'utf8');
+        
+        console.log(`  - Successfully updated ${filePath}`);
+    } catch (error) {
+        console.error(`  - Error updating ${filePath}:`, error.message);
     }
-    
-    // Replace dollar signs with rupee symbol in price inputs
-    let updatedData = data.replace(
-      /<span>\$<\/span>/g, 
-      '<span>₹</span>'
-    );
-    
-    // Replace dollar signs with rupee symbol in modal price
-    updatedData = updatedData.replace(
-      /<p class="modal-price">\$(\d+\.\d+)<\/p>/g, 
-      '<p class="modal-price">₹$1</p>'
-    );
-    
-    // Write the updated content back to the file
-    fs.writeFile(filePath, updatedData, 'utf8', (writeErr) => {
-      if (writeErr) {
-        console.error(`Error writing to ${brandFile}:`, writeErr);
-        return;
-      }
-      console.log(`Successfully updated ${brandFile}`);
-    });
-  });
 }
 
 // Update all brand pages
-console.log('Starting to update brand pages...');
-brandPages.forEach(brandFile => {
-  updateBrandPage(brandFile);
-});
-
-console.log('All brand pages updated successfully!'); 
+console.log('Starting brand page updates...');
+brandPages.forEach(updateBrandPage);
+console.log('Brand page updates completed.'); 
