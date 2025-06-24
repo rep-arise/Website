@@ -1,164 +1,178 @@
 /**
- * Fix Products Script - Simple Direct Approach
+ * Consolidated Product Fixes
+ * This file combines all product-related fixes into a single module
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Fix Products: Simple direct approach loaded');
-    
-    // Direct approach to load products
-    function loadProducts() {
-        // Fetch all product data
-        Promise.all([
-            fetch('man/products.json').then(res => res.json()).catch(() => []),
-            fetch('women/products.json').then(res => res.json()).catch(() => []),
-            fetch('unisex/products.json').then(res => res.json()).catch(() => [])
-        ])
-        .then(([menProducts, womenProducts, unisexProducts]) => {
-            const allProducts = [...menProducts, ...womenProducts, ...unisexProducts];
-            console.log('Fix Products: Loaded total products:', allProducts.length);
-            
-            if (allProducts.length === 0) {
-                console.error('Fix Products: No products found in JSON files');
-                return;
-            }
-            
-            // Find the products grid and clear it
-            const productsGrid = document.querySelector('.products-grid');
-            if (!productsGrid) {
-                console.error('Fix Products: Products grid not found');
-                return;
-            }
-            
-            // Clear the grid
-            productsGrid.innerHTML = '';
-            
-            // Render each product
-            allProducts.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.setAttribute('data-price', product.price);
-                card.setAttribute('data-brand', product.brand);
-                card.setAttribute('data-category', product.category);
-                card.setAttribute('data-collection', product.collection.toLowerCase().replace(/ /g, '-'));
-                card.setAttribute('data-sizes', product.sizes.join(','));
-                if (product.new) card.setAttribute('data-new', 'true');
-                
-                card.innerHTML = `
-                    ${product.new ? '<div class="product-tag new">New</div>' : ''}
-                    <div class="product-category-tag${product.category === 'unisex' ? ' unisex' : ''}">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
-                    <img src="${product.image}" alt="${product.name}" loading="lazy">
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <div class="price">₹${product.price}</div>
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn quick-view-btn">Quick View</button>
-                    </div>
-                `;
-                productsGrid.appendChild(card);
+const ProductFixes = {
+    // Currency formatting and display
+    currency: {
+        format: function(price) {
+            return `₹${price.toLocaleString('en-IN')}`;
+        },
+        
+        update: function() {
+            const priceElements = document.querySelectorAll('.price');
+            priceElements.forEach(el => {
+                const price = parseFloat(el.getAttribute('data-price'));
+                if (!isNaN(price)) {
+                    el.textContent = this.format(price);
+                }
             });
-            
-            console.log('Fix Products: Rendered all products');
-            
-            // Sort products by newest first by default
-            const sortSelect = document.getElementById('sort-select');
-            if (sortSelect) {
-                sortSelect.value = 'new';
-                sortProducts('new');
+        }
+    },
+
+    // Filter functionality
+    filter: {
+        init: function() {
+            this.setupEventListeners();
+            this.initializeState();
+        },
+
+        setupEventListeners: function() {
+            const checkboxes = document.querySelectorAll('.filter-option input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => this.applyFilters());
+            });
+
+            // Price range handling
+            const priceInputs = document.querySelectorAll('.price-input input');
+            priceInputs.forEach(input => {
+                input.addEventListener('change', () => this.applyFilters());
+            });
+        },
+
+        initializeState: function() {
+            // Initialize filter state from URL params if any
+            const params = new URLSearchParams(window.location.search);
+            // ... rest of initialization logic
+        },
+
+        applyFilters: function() {
+            const selectedFilters = this.getSelectedFilters();
+            this.updateProductDisplay(selectedFilters);
+        },
+
+        getSelectedFilters: function() {
+            const filters = {
+                brands: [],
+                categories: [],
+                sizes: [],
+                priceRange: {
+                    min: parseFloat(document.getElementById('min-price-input').value),
+                    max: parseFloat(document.getElementById('max-price-input').value)
+                }
+            };
+
+            // Collect selected checkboxes
+            document.querySelectorAll('.filter-option input:checked').forEach(checkbox => {
+                const type = checkbox.getAttribute('name');
+                const value = checkbox.value;
+                if (filters[type]) {
+                    filters[type].push(value);
+                }
+            });
+
+            return filters;
+        },
+
+        updateProductDisplay: function(filters) {
+            const products = document.querySelectorAll('.product-card');
+            products.forEach(product => {
+                const matches = this.productMatchesFilters(product, filters);
+                product.style.display = matches ? 'flex' : 'none';
+            });
+        },
+
+        productMatchesFilters: function(product, filters) {
+            // Check brand match
+            const brand = product.getAttribute('data-brand');
+            if (filters.brands.length && !filters.brands.includes(brand)) {
+                return false;
             }
 
-            // Setup quick view functionality
-            setupQuickView();
-        })
-        .catch(error => {
-            console.error('Fix Products: Error loading products:', error);
-        });
-    }
-    
-    // Sort products function
-    function sortProducts(sortType) {
-        const productsGrid = document.querySelector('.products-grid');
-        if (!productsGrid) return;
-        
-        // Get only visible products
-        const products = Array.from(productsGrid.children).filter(card => 
-            window.getComputedStyle(card).display !== 'none'
-        );
-        
-        products.sort((a, b) => {
-            const priceA = parseInt(a.getAttribute('data-price')) || 0;
-            const priceB = parseInt(b.getAttribute('data-price')) || 0;
-            const isNewA = a.hasAttribute('data-new');
-            const isNewB = b.hasAttribute('data-new');
-            
-            switch (sortType) {
-                case 'low-high':
-                    return priceA - priceB;
-                case 'high-low':
-                    return priceB - priceA;
-                case 'new':
-                default:
-                    // First sort by new/old
-                    if (isNewA !== isNewB) {
-                        return isNewA ? -1 : 1;
-                    }
-                    // Then by price (higher price first for new items)
-                    return priceB - priceA;
+            // Check category match
+            const category = product.getAttribute('data-category');
+            if (filters.categories.length && !filters.categories.includes(category)) {
+                return false;
             }
-        });
-        
-        // Remove all sorted products and re-append them
-        products.forEach(product => {
-            productsGrid.appendChild(product);
-        });
-    }
-    
-    // Setup quick view functionality
-    function setupQuickView() {
-        const quickViewBtns = document.querySelectorAll('.quick-view-btn');
-        const quickViewModal = document.querySelector('.quick-view-modal');
-        const closeModalBtn = document.querySelector('.close-modal');
-        
-        if (!quickViewBtns.length || !quickViewModal || !closeModalBtn) {
-            console.error('Fix Products: Quick view elements not found');
-            return;
+
+            // Check size match
+            const sizes = product.getAttribute('data-sizes').split(',');
+            if (filters.sizes.length && !filters.sizes.some(size => sizes.includes(size))) {
+                return false;
+            }
+
+            // Check price range
+            const price = parseFloat(product.getAttribute('data-price'));
+            if (price < filters.priceRange.min || price > filters.priceRange.max) {
+                return false;
+            }
+
+            return true;
         }
-        
-        // Close modal functionality
-        closeModalBtn.addEventListener('click', function() {
-            quickViewModal.classList.remove('active');
-        });
-        
-        // Quick view button functionality
-        quickViewBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const card = this.closest('.product-card');
-                if (!card) return;
-                
-                const productName = card.querySelector('h3').textContent;
-                const productPrice = card.getAttribute('data-price');
-                const productImage = card.querySelector('img').src;
-                const sizes = card.getAttribute('data-sizes').split(',');
-                
-                // Update modal content
-                quickViewModal.querySelector('.modal-title').textContent = productName;
-                quickViewModal.querySelector('.modal-price').textContent = '₹' + productPrice;
-                quickViewModal.querySelector('.modal-image img').src = productImage;
-                quickViewModal.querySelector('.modal-description').textContent = 
-                    `Experience premium quality with our 1:1 replica of the ${productName}. Perfect craftsmanship, premium materials, and unbeatable comfort.`;
-                
-                // Update size options
-                const sizeOptions = quickViewModal.querySelector('.size-options');
-                sizeOptions.innerHTML = sizes.map(size => `
-                    <button class="size-btn">UK ${size}</button>
-                `).join('');
+    },
+
+    // Direct product fixes
+    direct: {
+        init: function() {
+            this.fixProductCards();
+            this.setupQuickView();
+        },
+
+        fixProductCards: function() {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                // Fix image loading
+                const img = card.querySelector('img');
+                if (img && !img.src) {
+                    img.src = img.getAttribute('data-src');
+                }
+
+                // Fix price display
+                const price = card.querySelector('.price');
+                if (price) {
+                    ProductFixes.currency.format(parseFloat(price.getAttribute('data-price')));
+                }
+            });
+        },
+
+        setupQuickView: function() {
+            const quickViewButtons = document.querySelectorAll('.quick-view-btn');
+            quickViewButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const productId = btn.closest('.product-card').getAttribute('data-product-id');
+                    this.showQuickView(productId);
+                });
+            });
+        },
+
+        showQuickView: function(productId) {
+            const modal = document.querySelector('.quick-view-modal');
+            const product = document.querySelector(`[data-product-id="${productId}"]`);
+            
+            if (modal && product) {
+                // Populate modal content
+                modal.querySelector('.modal-image img').src = product.querySelector('img').src;
+                modal.querySelector('.modal-title').textContent = product.querySelector('h3').textContent;
+                modal.querySelector('.modal-price').textContent = product.querySelector('.price').textContent;
                 
                 // Show modal
-                quickViewModal.classList.add('active');
-            });
-        });
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
     }
-    
-    // Load products immediately
-    loadProducts();
-}); 
+};
+
+// Initialize all fixes
+document.addEventListener('DOMContentLoaded', () => {
+    ProductFixes.currency.update();
+    ProductFixes.filter.init();
+    ProductFixes.direct.init();
+});
+
+// Export for module usage if needed
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ProductFixes;
+} 
