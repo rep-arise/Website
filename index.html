@@ -275,12 +275,14 @@
     <!-- Overlay -->
     <div class="overlay"></div>
 
+    <!-- CRITICAL: Load cache-buster first to prevent caching of other scripts -->
+    <script src="js/cache-buster.js"></script>
+    
     <script src="js/app.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/search.js"></script>
     <script src="/js/currency-fix.js"></script>
     <script src="/js/filter-fix.js"></script>
     <script src="/js/direct-fix.js"></script>
-    <script src="js/cache-buster.js"></script>
 </body>
 </html>

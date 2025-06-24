@@ -23,42 +23,71 @@
     border: 1px solid rgba(157, 78, 221, 0.4) !important;
 }
 
-/* Filter sidebar positioning fix */
+/* Filter sidebar positioning fix - CRITICAL FIX */
 .filter-sidebar {
     position: sticky !important;
     top: 100px !important;
     z-index: 100 !important;
-    height: auto !important;
-    min-height: fit-content !important;
-    max-height: none !important;
     overflow: visible !important;
+    background: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
 }
 
-/* Desktop specific filter sidebar fixes */
+/* Desktop specific filter sidebar fixes - CRITICAL FIX */
 @media (min-width: 993px) {
     .filter-sidebar {
         position: relative !important;
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
-        padding-bottom: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
+        display: inline-block !important;
+        width: auto !important;
+        max-width: 280px !important;
+        border-radius: 10px !important;
+        background-color: rgba(16, 0, 43, 0.95) !important;
+        padding: 20px !important;
+        margin: 0 !important;
+    }
+    
+    .filter-sidebar::after {
+        content: none !important;
+    }
+    
+    .filter-sidebar::before {
+        content: none !important;
+    }
+    
+    .filter-header {
+        margin-bottom: 15px !important;
+        padding-bottom: 10px !important;
     }
     
     .filter-group {
-        margin-bottom: 20px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .filter-group:last-of-type {
+        margin-bottom: 10px !important;
     }
     
     .apply-filter, .clear-filter {
         display: block !important;
+        width: 100% !important;
         opacity: 1 !important;
         visibility: visible !important;
-        margin-top: 10px !important;
+        margin: 0 !important;
     }
     
     .apply-filter {
         margin-bottom: 10px !important;
+    }
+    
+    /* Fix shop grid layout */
+    .shop-grid {
+        display: grid !important;
+        grid-template-columns: 280px 1fr !important;
+        gap: 30px !important;
+        align-items: start !important;
     }
 }
 
@@ -81,6 +110,10 @@ header, .main-header, nav, .nav-container {
         transform: translateX(-100%) !important;
         transition: transform 0.3s ease-in-out !important;
         overflow-y: auto !important;
+        background-color: rgba(16, 0, 43, 0.98) !important;
+        backdrop-filter: blur(10px) !important;
+        padding: 20px !important;
+        box-shadow: var(--box-shadow) !important;
     }
     
     .filter-sidebar.active {
