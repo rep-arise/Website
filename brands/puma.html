@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puma Collection - Rep Arise</title>
-    <link rel="stylesheet" href="../css/styles.css?v=1.1">
+    <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/grid-fix.css">
+    <link rel="stylesheet" href="../css/grid-fix.css">
+    <!-- CRITICAL: Prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 </head>
 <body class="brands-page">
     <header>
@@ -291,10 +295,14 @@
     <link rel="stylesheet" href="../css/grid-fix.css">
     <script src="../js/currency-fix.js"></script>
     <script src="../js/filter-fix.js"></script>
-    <!-- CRITICAL BRAND FILTER FIX - MUST LOAD AFTER filter-fix.js -->
+    
+    <!-- CRITICAL BRAND FILTER FIX - AGGRESSIVE VERSION -->
+    <script src="../js/product-card-fix.js"></script>
+    <script src="../js/direct-brand-filter.js"></script>
     <script src="../js/brand-filter-fix.js"></script>
-    <script src="/js/currency-fix.js"></script>
-    <script src="/js/filter-fix.js"></script>
-    <script src="/js/direct-fix.js"></script>
+    
+    <!-- CRITICAL: Load cache-buster first to prevent caching of other scripts -->
+    <script src="../js/cache-buster.js"></script>
+    <script src="../js/cache-buster-sw.js"></script>
 </body>
 </html>

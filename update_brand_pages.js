@@ -1,63 +1,78 @@
 /**
- * Script to update all brand pages to include the brand-filter-fix.js script
+ * UPDATE BRAND PAGES
+ * 
+ * This script updates all brand-specific HTML pages to include the new filtering scripts.
+ * It ensures consistent script loading across all pages.
  */
 
 const fs = require('fs');
 const path = require('path');
 
-// List of brand HTML files to update
-const brandPages = [
-    'brands/adidas.html',
-    'brands/asics.html',
-    'brands/converse.html',
-    'brands/jordan.html',
-    'brands/new-balance.html',
-    'brands/nike.html',
-    'brands/puma.html',
-    'brands/reebok.html'
-];
+// Define the brand pages directory
+const brandsDir = path.join(__dirname, 'brands');
 
-// Function to update a single brand page
-function updateBrandPage(filePath) {
-    console.log(`Updating ${filePath}...`);
+// Get all HTML files in the brands directory
+const brandFiles = fs.readdirSync(brandsDir)
+    .filter(file => file.endsWith('.html'));
+
+console.log(`Found ${brandFiles.length} brand HTML files to update.`);
+
+// The scripts section to replace in each file
+const oldScriptPattern = /<!-- CRITICAL FIXES[\s\S]*?<\/body>/;
+
+// The new scripts to insert
+const newScripts = `<!-- CRITICAL FIXES - DO NOT REMOVE -->
+    <link rel="stylesheet" href="../css/grid-fix.css">
+    <script src="../js/currency-fix.js"></script>
+    <script src="../js/filter-fix.js"></script>
     
-    try {
-        // Read the file content
-        let content = fs.readFileSync(filePath, 'utf8');
-        
-        // Check if the brand-filter-fix.js script is already included
-        if (content.includes('brand-filter-fix.js')) {
-            console.log(`  - brand-filter-fix.js already included in ${filePath}`);
-            return;
-        }
-        
-        // Find the position to insert the new script
-        const insertAfter = '<script src="../js/filter-fix.js"></script>';
-        const insertPosition = content.indexOf(insertAfter);
-        
-        if (insertPosition === -1) {
-            console.error(`  - Could not find insertion point in ${filePath}`);
-            return;
-        }
-        
-        // Insert the new script tag
-        const newScriptTag = `${insertAfter}
-    <!-- CRITICAL BRAND FILTER FIX - MUST LOAD AFTER filter-fix.js -->
-    <script src="../js/brand-filter-fix.js"></script>`;
-        
-        // Replace the old script tag with the new one (with our addition)
-        content = content.replace(insertAfter, newScriptTag);
-        
-        // Write the updated content back to the file
-        fs.writeFileSync(filePath, content, 'utf8');
-        
-        console.log(`  - Successfully updated ${filePath}`);
-    } catch (error) {
-        console.error(`  - Error updating ${filePath}:`, error.message);
-    }
-}
+    <!-- CRITICAL BRAND FILTER FIX - AGGRESSIVE VERSION -->
+    <script src="../js/product-card-fix.js"></script>
+    <script src="../js/direct-brand-filter.js"></script>
+    <script src="../js/brand-filter-fix.js"></script>
+    
+    <!-- CRITICAL: Load cache-buster first to prevent caching of other scripts -->
+    <script src="../js/cache-buster.js"></script>
+    <script src="../js/cache-buster-sw.js"></script>
+</body>`;
 
-// Update all brand pages
-console.log('Starting brand page updates...');
-brandPages.forEach(updateBrandPage);
-console.log('Brand page updates completed.'); 
+// Add cache control meta tags
+const headPattern = /<head>[\s\S]*?<\/head>/;
+const cacheControlMeta = `<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$BRAND_NAME Collection - Rep Arise</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/grid-fix.css">
+    <!-- CRITICAL: Prevent caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>`;
+
+// Process each brand file
+brandFiles.forEach(file => {
+    const filePath = path.join(brandsDir, file);
+    
+    // Extract brand name from filename
+    const brandName = file.replace('.html', '');
+    const brandNameCapitalized = brandName.charAt(0).toUpperCase() + brandName.slice(1);
+    
+    // Read the file content
+    let content = fs.readFileSync(filePath, 'utf8');
+    
+    // Replace the head section to add cache control
+    content = content.replace(headPattern, cacheControlMeta.replace('$BRAND_NAME', brandNameCapitalized));
+    
+    // Replace the scripts section
+    content = content.replace(oldScriptPattern, newScripts);
+    
+    // Write the updated content back to the file
+    fs.writeFileSync(filePath, content);
+    
+    console.log(`Updated ${file}`);
+});
+
+console.log('All brand pages updated successfully!'); 
