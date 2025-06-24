@@ -3,174 +3,155 @@
  * This file combines all product-related fixes into a single module
  */
 
-const ProductFixes = {
-    // Currency formatting and display
-    currency: {
-        format: function(price) {
-            return `₹${price.toLocaleString('en-IN')}`;
-        },
-        
-        update: function() {
-            const priceElements = document.querySelectorAll('.price');
-            priceElements.forEach(el => {
-                const price = parseFloat(el.getAttribute('data-price'));
-                if (!isNaN(price)) {
-                    el.textContent = this.format(price);
-                }
+const ProductFixes = (() => {
+    // Private utility functions
+    const $ = selector => document.querySelector(selector);
+    const $$ = selector => document.querySelectorAll(selector);
+    const formatPrice = price => `₹${price.toLocaleString('en-IN')}`;
+    const getFloat = (el, attr) => parseFloat(el.getAttribute(attr));
+    const getDataAttr = (el, attr) => el.getAttribute(`data-${attr}`);
+
+    // Currency module
+    const currency = {
+        format: formatPrice,
+        update() {
+            $$('.price').forEach(el => {
+                const price = getFloat(el, 'data-price');
+                if (!isNaN(price)) el.textContent = formatPrice(price);
             });
         }
-    },
+    };
 
-    // Filter functionality
-    filter: {
-        init: function() {
+    // Filter module
+    const filter = {
+        init() {
             this.setupEventListeners();
             this.initializeState();
         },
 
-        setupEventListeners: function() {
-            const checkboxes = document.querySelectorAll('.filter-option input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', () => this.applyFilters());
-            });
+        setupEventListeners() {
+            $$('.filter-option input[type="checkbox"]').forEach(cb => 
+                cb.addEventListener('change', () => this.applyFilters())
+            );
 
-            // Price range handling
-            const priceInputs = document.querySelectorAll('.price-input input');
-            priceInputs.forEach(input => {
-                input.addEventListener('change', () => this.applyFilters());
-            });
+            $$('.price-input input').forEach(input => 
+                input.addEventListener('change', () => this.applyFilters())
+            );
         },
 
-        initializeState: function() {
-            // Initialize filter state from URL params if any
+        initializeState() {
             const params = new URLSearchParams(window.location.search);
             // ... rest of initialization logic
         },
 
-        applyFilters: function() {
-            const selectedFilters = this.getSelectedFilters();
-            this.updateProductDisplay(selectedFilters);
+        applyFilters() {
+            this.updateProductDisplay(this.getSelectedFilters());
         },
 
-        getSelectedFilters: function() {
+        getSelectedFilters() {
             const filters = {
                 brands: [],
                 categories: [],
                 sizes: [],
                 priceRange: {
-                    min: parseFloat(document.getElementById('min-price-input').value),
-                    max: parseFloat(document.getElementById('max-price-input').value)
+                    min: getFloat($('#min-price-input'), 'value'),
+                    max: getFloat($('#max-price-input'), 'value')
                 }
             };
 
-            // Collect selected checkboxes
-            document.querySelectorAll('.filter-option input:checked').forEach(checkbox => {
-                const type = checkbox.getAttribute('name');
-                const value = checkbox.value;
-                if (filters[type]) {
-                    filters[type].push(value);
-                }
+            $$('.filter-option input:checked').forEach(cb => {
+                const type = cb.getAttribute('name');
+                filters[type]?.push(cb.value);
             });
 
             return filters;
         },
 
-        updateProductDisplay: function(filters) {
-            const products = document.querySelectorAll('.product-card');
-            products.forEach(product => {
-                const matches = this.productMatchesFilters(product, filters);
-                product.style.display = matches ? 'flex' : 'none';
+        updateProductDisplay(filters) {
+            $$('.product-card').forEach(product => {
+                product.style.display = this.productMatchesFilters(product, filters) ? 'flex' : 'none';
             });
         },
 
-        productMatchesFilters: function(product, filters) {
-            // Check brand match
-            const brand = product.getAttribute('data-brand');
-            if (filters.brands.length && !filters.brands.includes(brand)) {
-                return false;
-            }
+        productMatchesFilters(product, filters) {
+            const brand = getDataAttr(product, 'brand');
+            const category = getDataAttr(product, 'category');
+            const sizes = getDataAttr(product, 'sizes').split(',');
+            const price = getFloat(product, 'data-price');
 
-            // Check category match
-            const category = product.getAttribute('data-category');
-            if (filters.categories.length && !filters.categories.includes(category)) {
-                return false;
-            }
-
-            // Check size match
-            const sizes = product.getAttribute('data-sizes').split(',');
-            if (filters.sizes.length && !filters.sizes.some(size => sizes.includes(size))) {
-                return false;
-            }
-
-            // Check price range
-            const price = parseFloat(product.getAttribute('data-price'));
-            if (price < filters.priceRange.min || price > filters.priceRange.max) {
-                return false;
-            }
-
-            return true;
+            return (
+                (!filters.brands.length || filters.brands.includes(brand)) &&
+                (!filters.categories.length || filters.categories.includes(category)) &&
+                (!filters.sizes.length || filters.sizes.some(size => sizes.includes(size))) &&
+                price >= filters.priceRange.min && price <= filters.priceRange.max
+            );
         }
-    },
+    };
 
-    // Direct product fixes
-    direct: {
-        init: function() {
+    // Direct fixes module
+    const direct = {
+        init() {
             this.fixProductCards();
             this.setupQuickView();
         },
 
-        fixProductCards: function() {
-            const cards = document.querySelectorAll('.product-card');
-            cards.forEach(card => {
-                // Fix image loading
+        fixProductCards() {
+            $$('.product-card').forEach(card => {
                 const img = card.querySelector('img');
                 if (img && !img.src) {
                     img.src = img.getAttribute('data-src');
                 }
 
-                // Fix price display
                 const price = card.querySelector('.price');
                 if (price) {
-                    ProductFixes.currency.format(parseFloat(price.getAttribute('data-price')));
+                    currency.format(getFloat(price, 'data-price'));
                 }
             });
         },
 
-        setupQuickView: function() {
-            const quickViewButtons = document.querySelectorAll('.quick-view-btn');
-            quickViewButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
+        setupQuickView() {
+            $$('.quick-view-btn').forEach(btn => {
+                btn.addEventListener('click', e => {
                     e.preventDefault();
-                    const productId = btn.closest('.product-card').getAttribute('data-product-id');
-                    this.showQuickView(productId);
+                    this.showQuickView(getDataAttr(btn.closest('.product-card'), 'product-id'));
                 });
             });
         },
 
-        showQuickView: function(productId) {
-            const modal = document.querySelector('.quick-view-modal');
-            const product = document.querySelector(`[data-product-id="${productId}"]`);
+        showQuickView(productId) {
+            const modal = $('.quick-view-modal');
+            const product = $(`[data-product-id="${productId}"]`);
             
             if (modal && product) {
-                // Populate modal content
-                modal.querySelector('.modal-image img').src = product.querySelector('img').src;
-                modal.querySelector('.modal-title').textContent = product.querySelector('h3').textContent;
-                modal.querySelector('.modal-price').textContent = product.querySelector('.price').textContent;
+                const modalImg = modal.querySelector('.modal-image img');
+                const modalTitle = modal.querySelector('.modal-title');
+                const modalPrice = modal.querySelector('.modal-price');
+
+                modalImg.src = product.querySelector('img').src;
+                modalTitle.textContent = product.querySelector('h3').textContent;
+                modalPrice.textContent = product.querySelector('.price').textContent;
                 
-                // Show modal
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
         }
-    }
-};
+    };
 
-// Initialize all fixes
-document.addEventListener('DOMContentLoaded', () => {
-    ProductFixes.currency.update();
-    ProductFixes.filter.init();
-    ProductFixes.direct.init();
-});
+    // Public API
+    return {
+        currency,
+        filter,
+        direct,
+        init() {
+            currency.update();
+            filter.init();
+            direct.init();
+        }
+    };
+})();
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', ProductFixes.init);
 
 // Export for module usage if needed
 if (typeof module !== 'undefined' && module.exports) {

@@ -5,70 +5,73 @@
  * intercepting all fetch requests and bypassing the browser cache.
  */
 
-// Use a unique cache name with timestamp to force updates
-const CACHE_NAME = 'no-cache-' + new Date().getTime();
+// Constants
+const CACHE_NAME = `no-cache-${Date.now()}`;
+const CACHE_HEADERS = {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+};
 
-// Immediately activate this service worker without waiting
+// Cache management
+const cacheManager = {
+    clearAll: async () => {
+        const cacheNames = await caches.keys();
+        return Promise.all(cacheNames.map(name => caches.delete(name)));
+    }
+};
+
+// Request handling
+const requestHandler = {
+    shouldCacheBust: request => {
+        return request.method === 'GET' && 
+               new URL(request.url).protocol !== 'chrome-extension:';
+    },
+
+    createCacheBustedRequest: request => {
+        const url = new URL(request.url);
+        url.searchParams.set('_sw_cache_bust', Date.now());
+
+        return new Request(url.href, {
+            method: request.method,
+            headers: request.headers,
+            mode: request.mode,
+            credentials: request.credentials,
+            redirect: request.redirect,
+            referrer: request.referrer,
+            integrity: request.integrity
+        });
+    },
+
+    handleFetch: async request => {
+        if (!requestHandler.shouldCacheBust(request)) {
+            return fetch(request);
+        }
+
+        try {
+            return await fetch(requestHandler.createCacheBustedRequest(request), {
+                cache: 'no-store',
+                headers: CACHE_HEADERS
+            });
+        } catch (error) {
+            console.error('Service worker fetch error:', error);
+            return fetch(request);
+        }
+    }
+};
+
+// Event listeners
 self.addEventListener('install', event => {
-  event.waitUntil(self.skipWaiting());
+    event.waitUntil(self.skipWaiting());
 });
 
-// Claim clients immediately
 self.addEventListener('activate', event => {
-  event.waitUntil(self.clients.claim());
-  
-  // Clear any existing caches
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          return caches.delete(cacheName);
-        })
-      );
-    })
-  );
+    event.waitUntil(Promise.all([
+        self.clients.claim(),
+        cacheManager.clearAll()
+    ]));
 });
 
-// Intercept all fetch requests
 self.addEventListener('fetch', event => {
-  // Skip POST requests
-  if (event.request.method !== 'GET') return;
-  
-  // Add cache busting for all GET requests
-  event.respondWith(
-    fetch(cacheBustRequest(event.request), {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      }
-    }).catch(error => {
-      console.error('Service worker fetch error:', error);
-      // Fall back to original request if fetch fails
-      return fetch(event.request);
-    })
-  );
-});
-
-// Function to add cache busting parameter to requests
-function cacheBustRequest(request) {
-  const url = new URL(request.url);
-  
-  // Don't cache bust chrome-extension:// URLs
-  if (url.protocol === 'chrome-extension:') return request;
-  
-  // Add or update the cache busting parameter
-  url.searchParams.set('_sw_cache_bust', Date.now());
-  
-  // Create a new request with the modified URL
-  return new Request(url.href, {
-    method: request.method,
-    headers: request.headers,
-    mode: request.mode,
-    credentials: request.credentials,
-    redirect: request.redirect,
-    referrer: request.referrer,
-    integrity: request.integrity
-  });
-} 
+    event.respondWith(requestHandler.handleFetch(event.request));
+}); 

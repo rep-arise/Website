@@ -3,384 +3,114 @@
  * This file handles all animations and interactive elements for the website
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Header scroll effect
-    const header = document.querySelector('header');
-    const navMenu = document.querySelectorAll('.nav-menu a');
-    
-    // Set active menu item based on current page
-    const currentLocation = window.location.pathname;
-    navMenu.forEach(link => {
-        const linkPath = link.getAttribute('href');
-        if (currentLocation.endsWith(linkPath) || 
-            (linkPath === 'index.html' && (currentLocation === '/' || currentLocation.endsWith('/')))) {
-            link.classList.add('active');
-        }
-    });
-    
-    // Header scroll animation
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-    
-    // Add animation to nav menu items
-    navMenu.forEach((item, index) => {
-        item.style.opacity = '0';
-        item.style.transform = 'translateY(-20px)';
-        setTimeout(() => {
-            item.style.transition = 'all 0.4s ease';
-            item.style.opacity = '1';
-            item.style.transform = 'translateY(0)';
-        }, 100 + (index * 100));
-    });
-    
-    // Add animation to nav icons
-    const navIcons = document.querySelectorAll('.nav-icons a');
-    navIcons.forEach((icon, index) => {
-        icon.style.opacity = '0';
-        icon.style.transform = 'translateY(-20px)';
-        setTimeout(() => {
-            icon.style.transition = 'all 0.4s ease';
-            icon.style.opacity = '1';
-            icon.style.transform = 'translateY(0)';
-        }, 500 + (index * 100));
-    });
+(() => {
+    // DOM helper functions
+    const $ = selector => document.querySelector(selector);
+    const $$ = selector => document.querySelectorAll(selector);
+    const createElement = (tag, className) => {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        return el;
+    };
 
-    // Mobile menu toggle - Updated for enhanced mobile navigation
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navMenuList = document.querySelector('.nav-menu');
-    const body = document.body;
-    
-    // Create nav overlay if it doesn't exist
-    let navOverlay = document.querySelector('.nav-overlay');
-    if (!navOverlay) {
-        navOverlay = document.createElement('div');
-        navOverlay.classList.add('nav-overlay');
-        document.body.appendChild(navOverlay);
-    }
-    
-    if (menuToggle && navMenuList) {
-        menuToggle.addEventListener('click', function() {
-            // Toggle active classes
-            menuToggle.classList.toggle('active');
-            navMenuList.classList.toggle('active');
-            navOverlay.classList.toggle('active');
-            
-            // Prevent body scrolling when menu is open
-            if (navMenuList.classList.contains('active')) {
-                body.style.overflow = 'hidden';
-            } else {
-                body.style.overflow = '';
-            }
-            
-            // Animate the hamburger icon
-            const icon = this.querySelector('i');
-            if (icon) {
-                if (navMenuList.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            }
-        });
-        
-        // Close menu when clicking on a menu item
-        const menuItems = navMenuList.querySelectorAll('a');
-        menuItems.forEach(item => {
-            item.addEventListener('click', function() {
-                menuToggle.classList.remove('active');
-                navMenuList.classList.remove('active');
-                navOverlay.classList.remove('active');
-                body.style.overflow = '';
-                
-                // Reset hamburger icon
-                const icon = menuToggle.querySelector('i');
-                if (icon) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
+    // Animation utilities
+    const animate = {
+        fadeInUp: (element, delay = 0, duration = 400) => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                element.style.transition = `all ${duration}ms ease`;
+                element.style.opacity = '1';
+                element.style.transform = 'translateY(0)';
+            }, delay);
+        },
+
+        stagger: (elements, callback, baseDelay = 100) => {
+            elements.forEach((el, i) => callback(el, baseDelay + (i * baseDelay)));
+        }
+    };
+
+    // Navigation functionality
+    const nav = {
+        init() {
+            this.initActiveMenuItem();
+            this.initHeaderScroll();
+            this.initMenuAnimations();
+            this.initMobileMenu();
+        },
+
+        initActiveMenuItem() {
+            const currentLocation = window.location.pathname;
+            $$('.nav-menu a').forEach(link => {
+                const linkPath = link.getAttribute('href');
+                if (currentLocation.endsWith(linkPath) || 
+                    (linkPath === 'index.html' && (currentLocation === '/' || currentLocation.endsWith('/')))) {
+                    link.classList.add('active');
                 }
             });
-        });
-        
-        // Close menu when clicking on overlay
-        navOverlay.addEventListener('click', function() {
-            menuToggle.classList.remove('active');
-            navMenuList.classList.remove('active');
-            navOverlay.classList.remove('active');
-            body.style.overflow = '';
-            
-            // Reset hamburger icon
-            const icon = menuToggle.querySelector('i');
-            if (icon) {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-    }
+        },
 
-    // Cart sidebar toggle
-    const cartIcon = document.querySelector('.cart-icon');
-    const cartSidebar = document.querySelector('.cart-sidebar');
-    const closeCart = document.querySelector('.close-cart');
-    
-    if (cartIcon && cartSidebar) {
-        cartIcon.addEventListener('click', function(e) {
-            e.preventDefault();
-            cartSidebar.classList.add('active');
-            navOverlay.classList.add('active');
-        });
-    }
-    
-    if (closeCart && cartSidebar) {
-        closeCart.addEventListener('click', function() {
-            cartSidebar.classList.remove('active');
-            navOverlay.classList.remove('active');
-        });
-    }
+        initHeaderScroll() {
+            const header = $('header');
+            if (!header) return;
 
-    // Wishlist sidebar toggle
-    const wishlistIcon = document.querySelector('.wishlist-icon');
-    const wishlistSidebar = document.querySelector('.wishlist-sidebar');
-    const closeWishlist = document.querySelector('.close-wishlist');
-    
-    if (wishlistIcon && wishlistSidebar) {
-        wishlistIcon.addEventListener('click', function(e) {
-            e.preventDefault();
-            wishlistSidebar.classList.add('active');
-            navOverlay.classList.add('active');
-        });
-    }
-    
-    if (closeWishlist && wishlistSidebar) {
-        closeWishlist.addEventListener('click', function() {
-            wishlistSidebar.classList.remove('active');
-            navOverlay.classList.remove('active');
-        });
-    }
+            let lastScroll = window.scrollY;
+            const scrollThreshold = 50;
 
-    // Close sidebars when clicking overlay
-    navOverlay.addEventListener('click', function() {
-        if (cartSidebar) cartSidebar.classList.remove('active');
-        if (wishlistSidebar) wishlistSidebar.classList.remove('active');
-        navOverlay.classList.remove('active');
-        body.style.overflow = '';
-    });
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.scrollY;
+                if (Math.abs(currentScroll - lastScroll) > 5) {
+                    header.classList.toggle('scrolled', currentScroll > scrollThreshold);
+                    lastScroll = currentScroll;
+                }
+            }, { passive: true });
+        },
 
-    // Enhanced scroll reveal animations
-    const revealElements = document.querySelectorAll('.section-title, .section-subtitle, .service-item, .brand-item, .proof-item');
-    
-    const revealOnScroll = function() {
-        const windowHeight = window.innerHeight;
-        
-        revealElements.forEach(element => {
-            const elementTop = element.getBoundingClientRect().top;
-            const elementVisible = 150;
-            
-            if (elementTop < windowHeight - elementVisible) {
-                element.classList.add('active');
-            }
-        });
-    };
-    
-    // Initial check on page load
-    revealOnScroll();
-    
-    // Check on scroll
-    window.addEventListener('scroll', revealOnScroll);
+        initMenuAnimations() {
+            // Animate menu items
+            animate.stagger($$('.nav-menu a'), (item, delay) => {
+                animate.fadeInUp(item, delay);
+            });
 
-    // Animate social proof numbers when they come into view
-    const proofItems = document.querySelectorAll('.proof-item');
-    const proofNumbers = document.querySelectorAll('.proof-number');
-    
-    const animateNumbers = function() {
-        proofItems.forEach(item => {
-            const itemTop = item.getBoundingClientRect().top;
-            const itemVisible = 150;
-            
-            if (itemTop < window.innerHeight - itemVisible) {
-                item.classList.add('animated');
-            }
-        });
-    };
-    
-    window.addEventListener('scroll', animateNumbers);
-    
-    // Floating animation for certain elements
-    const floatElements = document.querySelectorAll('.hero .btn, .instagram-cta .btn');
-    floatElements.forEach(element => {
-        element.classList.add('animate-float');
-    });
+            // Animate nav icons
+            animate.stagger($$('.nav-icons a'), (icon, delay) => {
+                animate.fadeInUp(icon, delay + 400);
+            });
+        },
 
-    // Enhanced hover effects for brand items
-    const brandItems = document.querySelectorAll('.brand-item');
-    brandItems.forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-15px) scale(1.05)';
-            this.style.boxShadow = '0 20px 40px rgba(123, 44, 191, 0.4)';
-            this.style.borderColor = 'rgba(157, 78, 221, 0.3)';
-            
-            // Add glow effect on hover
-            const brandImage = this.querySelector('.brand-image img');
-            if (brandImage) {
-                brandImage.style.transform = 'scale(1.1) rotateY(10deg)';
-                brandImage.style.filter = 'drop-shadow(0 15px 20px rgba(123, 44, 191, 0.5))';
-            }
-            
-            // Animate brand name underline
-            const brandName = this.querySelector('.brand-name');
-            if (brandName) {
-                brandName.style.color = 'var(--primary-light)';
-            }
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-            this.style.boxShadow = '';
-            this.style.borderColor = '';
-            
-            const brandImage = this.querySelector('.brand-image img');
-            if (brandImage) {
-                brandImage.style.transform = '';
-                brandImage.style.filter = '';
-            }
-            
-            const brandName = this.querySelector('.brand-name');
-            if (brandName) {
-                brandName.style.color = '';
-            }
-        });
-    });
+        initMobileMenu() {
+            const menuToggle = $('.menu-toggle');
+            const navMenu = $('.nav-menu');
+            let navOverlay = $('.nav-overlay');
 
-    // Add ripple effect to buttons
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const x = e.clientX - e.target.getBoundingClientRect().left;
-            const y = e.clientY - e.target.getBoundingClientRect().top;
-            
-            const ripple = document.createElement('span');
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            ripple.classList.add('ripple');
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-    
-    // Add animated shapes to hero section
-    const heroSection = document.querySelector('.hero');
-    if (heroSection) {
-        // Create circle shape
-        const circleShape = document.createElement('div');
-        circleShape.classList.add('hero-shape', 'circle');
-        heroSection.appendChild(circleShape);
-        
-        // Create square shape
-        const squareShape = document.createElement('div');
-        squareShape.classList.add('hero-shape', 'square');
-        heroSection.appendChild(squareShape);
-    }
-    
-    // Add glowing orbs to CTA section
-    const ctaSection = document.querySelector('.cta-section');
-    if (ctaSection) {
-        // Create three glowing orbs
-        for (let i = 1; i <= 3; i++) {
-            const glowOrb = document.createElement('div');
-            glowOrb.classList.add('cta-glow');
-            ctaSection.appendChild(glowOrb);
+            if (!navOverlay) {
+                navOverlay = createElement('div', 'nav-overlay');
+                document.body.appendChild(navOverlay);
+            }
+
+            if (menuToggle && navMenu) {
+                const toggleMenu = (active) => {
+                    menuToggle.classList.toggle('active', active);
+                    navMenu.classList.toggle('active', active);
+                    navOverlay.classList.toggle('active', active);
+                    document.body.style.overflow = active ? 'hidden' : '';
+
+                    const icon = menuToggle.querySelector('i');
+                    if (icon) {
+                        icon.className = `fas fa-${active ? 'times' : 'bars'}`;
+                    }
+                };
+
+                menuToggle.addEventListener('click', () => toggleMenu(!navMenu.classList.contains('active')));
+                navOverlay.addEventListener('click', () => toggleMenu(false));
+                navMenu.querySelectorAll('a').forEach(item => item.addEventListener('click', () => toggleMenu(false)));
+            }
         }
-    }
-    
-    // Parallax effect for hero section
-    window.addEventListener('scroll', function() {
-        const scrollPosition = window.pageYOffset;
-        
-        if (heroSection) {
-            heroSection.style.backgroundPositionY = scrollPosition * 0.5 + 'px';
-        }
-    });
-    
-    // Enhanced hover effect for CTA button
-    const ctaButton = document.querySelector('.cta-section .btn');
-    if (ctaButton) {
-        ctaButton.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px) scale(1.05)';
-            this.style.boxShadow = '0 15px 35px rgba(123, 44, 191, 0.7)';
-        });
-        
-        ctaButton.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-            this.style.boxShadow = '';
-        });
-    }
-    
-    // Add 3D tilt effect to brand items
-    brandItems.forEach(item => {
-        item.addEventListener('mousemove', function(e) {
-            const itemRect = this.getBoundingClientRect();
-            const x = e.clientX - itemRect.left;
-            const y = e.clientY - itemRect.top;
-            
-            const xPercent = (x / itemRect.width - 0.5) * 20;
-            const yPercent = (y / itemRect.height - 0.5) * 20;
-            
-            this.style.transform = `perspective(1000px) rotateX(${-yPercent}deg) rotateY(${xPercent}deg) translateY(-15px) scale(1.05)`;
-            
-            const brandImage = this.querySelector('.brand-image img');
-            if (brandImage) {
-                brandImage.style.transform = `rotateY(${xPercent * 1.5}deg) scale(1.1)`;
-            }
-        });
-        
-        item.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-            
-            const brandImage = this.querySelector('.brand-image img');
-            if (brandImage) {
-                brandImage.style.transform = '';
-            }
-        });
-    });
-    
-    // Add scroll-triggered animations for section titles
-    const sectionTitles = document.querySelectorAll('.section-title');
-    const sectionSubtitles = document.querySelectorAll('.section-subtitle');
-    
-    const animateSections = function() {
-        const windowHeight = window.innerHeight;
-        
-        sectionTitles.forEach(title => {
-            const titleTop = title.getBoundingClientRect().top;
-            if (titleTop < windowHeight - 100) {
-                title.classList.add('active');
-            }
-        });
-        
-        sectionSubtitles.forEach(subtitle => {
-            const subtitleTop = subtitle.getBoundingClientRect().top;
-            if (subtitleTop < windowHeight - 100) {
-                subtitle.classList.add('active');
-            }
-        });
     };
-    
-    // Initial check
-    animateSections();
-    
-    // Check on scroll
-    window.addEventListener('scroll', animateSections);
-});
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => nav.init());
+})();
 
 // Footer animations
 document.addEventListener('DOMContentLoaded', function() {
