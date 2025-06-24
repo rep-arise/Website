@@ -41,18 +41,24 @@
         height: auto !important;
         max-height: none !important;
         overflow: visible !important;
-        padding-bottom: 30px !important;
+        padding-bottom: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
     
     .filter-group {
-        margin-bottom: 25px !important;
+        margin-bottom: 20px !important;
     }
     
     .apply-filter, .clear-filter {
         display: block !important;
         opacity: 1 !important;
         visibility: visible !important;
-        margin-top: 15px !important;
+        margin-top: 10px !important;
+    }
+    
+    .apply-filter {
+        margin-bottom: 10px !important;
     }
 }
 
