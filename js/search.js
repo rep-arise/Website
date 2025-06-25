@@ -29,12 +29,12 @@
             align-items: center;
             margin-left: 15px;
         }
-
+        
         .search-form {
             display: flex;
             align-items: center;
         }
-
+        
         .search-input {
             background-color: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -45,7 +45,7 @@
             width: 200px;
             transition: all 0.3s ease-in-out;
         }
-
+        
         .search-input:focus {
             outline: none;
             background-color: rgba(255, 255, 255, 0.15);
@@ -53,7 +53,7 @@
             box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
             width: 220px;
         }
-
+        
         .search-input::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
@@ -70,12 +70,12 @@
             align-items: center;
             justify-content: center;
         }
-
+        
         .search-icon:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: scale(1.05);
         }
-
+        
         .search-submit {
             background: none;
             border: none;
@@ -86,11 +86,11 @@
             opacity: 0.7;
             transition: all 0.3s ease-in-out;
         }
-
+        
         .search-submit:hover {
             opacity: 1;
         }
-
+        
         .search-close {
             display: none;
             background: none;
@@ -102,11 +102,11 @@
             opacity: 0.7;
             transition: all 0.3s ease-in-out;
         }
-
+        
         .search-close:hover {
             opacity: 1;
         }
-
+        
         .no-results-message {
             display: flex;
             flex-direction: column;
@@ -119,30 +119,30 @@
             border-radius: 10px;
             margin: 20px 0;
         }
-
+        
         .no-results-icon {
             font-size: 48px;
             color: #9d4edd;
             margin-bottom: 20px;
             opacity: 0.7;
         }
-
+        
         .no-results-message h3 {
             font-size: 24px;
             color: #ffffff;
             margin-bottom: 10px;
         }
-
+        
         .no-results-message p {
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 20px;
         }
-
+        
         .reset-search-btn {
             padding: 10px 20px;
             font-size: 14px;
         }
-
+        
         @media (max-width: 768px) {
             .search-container {
                 margin-left: 0;
@@ -158,34 +158,34 @@
                 visibility: hidden;
                 transition: all 0.3s ease;
             }
-
+            
             .search-container.active {
                 transform: translateY(0);
                 opacity: 1;
                 visibility: visible;
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             }
-
+            
             .search-form {
                 width: 100%;
             }
-
+            
             .search-input {
                 width: 100%;
                 padding: 10px 15px;
                 font-size: 16px;
             }
-
+            
             .search-close {
                 display: block;
             }
-
+            
             .search-icon {
                 margin-right: 10px;
             }
         }
     `;
-
+    
     const SEARCH_HTML = `
         <div class="search-icon">
             <i class="fas fa-search"></i>
@@ -354,9 +354,9 @@
             if (!this.elements.noResultsContainer) {
                 this.elements.noResultsContainer = createElement('div', 'no-results-message');
                 this.elements.noResultsContainer.innerHTML = `
-                    <div class="no-results-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
+            <div class="no-results-icon">
+                <i class="fas fa-search"></i>
+            </div>
                     <h3>No Results Found</h3>
                     <p>We couldn't find any products matching your search.</p>
                     <button class="btn reset-search-btn">Clear Search</button>

@@ -40,14 +40,14 @@
         },
 
         initActiveMenuItem() {
-            const currentLocation = window.location.pathname;
+    const currentLocation = window.location.pathname;
             $$('.nav-menu a').forEach(link => {
-                const linkPath = link.getAttribute('href');
-                if (currentLocation.endsWith(linkPath) || 
-                    (linkPath === 'index.html' && (currentLocation === '/' || currentLocation.endsWith('/')))) {
-                    link.classList.add('active');
-                }
-            });
+        const linkPath = link.getAttribute('href');
+        if (currentLocation.endsWith(linkPath) || 
+            (linkPath === 'index.html' && (currentLocation === '/' || currentLocation.endsWith('/')))) {
+            link.classList.add('active');
+        }
+    });
         },
 
         initHeaderScroll() {
