@@ -26,26 +26,62 @@
         if (applyFilterBtn) {
             console.log('Filter Button Fix: Found Apply Filter button, adding direct event listener');
             
-            // Remove any existing event listeners
+            // Remove any existing event listeners by replacing the button
             const newApplyBtn = applyFilterBtn.cloneNode(true);
             applyFilterBtn.parentNode.replaceChild(newApplyBtn, applyFilterBtn);
             
-            // Add new event listener
+            // Add new event listener with improved debugging
             newApplyBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log('Filter Button Fix: Apply Filter button clicked');
+                console.log('Apply Filter button clicked!'); // Explicit confirmation message
                 
-                // Call both filter implementations to ensure it works
-                if (typeof window.applyFilters === 'function') {
-                    window.applyFilters();
-                    console.log('Filter Button Fix: Called global applyFilters()');
-                }
+                // Get all selected filters for debugging
+                const selectedBrands = Array.from(document.querySelectorAll('input[name="brand"]:checked')).map(cb => cb.value);
+                const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+                const selectedSizes = Array.from(document.querySelectorAll('input[name="size"]:checked')).map(cb => cb.value);
+                const minPrice = document.getElementById('min-price-input')?.value || 0;
+                const maxPrice = document.getElementById('max-price-input')?.value || 20000;
                 
-                if (window.ProductFixes && window.ProductFixes.filter && typeof window.ProductFixes.filter.applyFilters === 'function') {
-                    window.ProductFixes.filter.applyFilters();
-                    console.log('Filter Button Fix: Called ProductFixes.filter.applyFilters()');
+                console.log('Selected filters:', {
+                    brands: selectedBrands,
+                    categories: selectedCategories,
+                    sizes: selectedSizes,
+                    priceRange: { min: minPrice, max: maxPrice }
+                });
+                
+                // Call filter implementations with proper error handling
+                try {
+                    // First try the filter-fix.js implementation
+                    if (typeof window.applyFilters === 'function') {
+                        console.log('Filter Button Fix: Calling global applyFilters()');
+                        window.applyFilters();
+                    } else {
+                        console.log('Filter Button Fix: Global applyFilters() not found');
+                    }
+                    
+                    // Then try the ProductFixes implementation
+                    if (window.ProductFixes && window.ProductFixes.filter && typeof window.ProductFixes.filter.applyFilters === 'function') {
+                        console.log('Filter Button Fix: Calling ProductFixes.filter.applyFilters()');
+                        window.ProductFixes.filter.applyFilters();
+                    } else {
+                        console.log('Filter Button Fix: ProductFixes.filter.applyFilters() not found');
+                    }
+                    
+                    // Ensure products are visible after filtering
+                    setTimeout(() => {
+                        const visibleProducts = document.querySelectorAll('.product-card[style*="display: flex"]').length;
+                        const totalProducts = document.querySelectorAll('.product-card').length;
+                        console.log(`Filter Button Fix: ${visibleProducts}/${totalProducts} products visible after filtering`);
+                    }, 100);
+                } catch (error) {
+                    console.error('Filter Button Fix: Error applying filters:', error);
                 }
             });
+            
+            // Ensure the button is properly styled and visible
+            newApplyBtn.style.display = 'block';
+            newApplyBtn.style.pointerEvents = 'auto';
+            console.log('Filter Button Fix: Apply button setup complete');
         }
         
         if (clearFilterBtn) {
@@ -114,7 +150,10 @@
         
         // Make filter functions globally available
         if (typeof window.applyFilters !== 'function' && typeof window.ProductFixes?.filter?.applyFilters === 'function') {
-            window.applyFilters = window.ProductFixes.filter.applyFilters.bind(window.ProductFixes.filter);
+            window.applyFilters = function() {
+                console.log('Filter Button Fix: Using global applyFilters wrapper');
+                return window.ProductFixes.filter.applyFilters.call(window.ProductFixes.filter);
+            };
             console.log('Filter Button Fix: Made ProductFixes.filter.applyFilters globally available');
         }
         
@@ -147,6 +186,16 @@
                 console.log('Filter Button Fix: All filters reset');
             };
         }
+        
+        // Verify the apply filter button works after a short delay
+        setTimeout(() => {
+            const applyBtn = document.getElementById('apply-filter-btn');
+            if (applyBtn) {
+                console.log('Filter Button Fix: Verifying Apply Filter button is working');
+                // Simulate a click to test if it works
+                // applyBtn.click(); // Uncomment for testing
+            }
+        }, 2000);
         
         console.log('Filter Button Fix: Initialization complete');
     });

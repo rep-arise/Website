@@ -201,6 +201,11 @@
             sortProducts(sortSelect.value);
             log(`Applied sorting: ${sortSelect.value}`);
         }
+        
+        // Count visible products for debugging
+        const visibleProducts = document.querySelectorAll('.product-card[style*="display: flex"]').length;
+        const totalProducts = document.querySelectorAll('.product-card').length;
+        log(`Filter results: ${visibleProducts}/${totalProducts} products visible after filtering`);
     };
 
     // Check if filters are empty
@@ -343,4 +348,11 @@
             window.addEventListener('resize', fixGridLayout);
         }, 1000);
     });
+    
+    // Export functions to global scope
+    window.applyFilters = applyFilters;
+    window.resetFilters = resetFilters;
+    
+    // Log that we've exported the functions
+    log('Exported applyFilters and resetFilters to global scope');
 })(); 

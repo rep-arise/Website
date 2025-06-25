@@ -49,7 +49,7 @@ const ProductFixes = (() => {
                 log('Setting up Apply Filter button');
                 applyBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    log('Apply filter button clicked');
+                    log('Apply filter button clicked from ProductFixes');
                     this.applyFilters();
                 });
             }
@@ -58,7 +58,7 @@ const ProductFixes = (() => {
                 log('Setting up Clear Filter button');
                 clearBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    log('Clear filter button clicked');
+                    log('Clear filter button clicked from ProductFixes');
                     this.clearFilters();
                     this.applyFilters();
                 });
@@ -71,7 +71,7 @@ const ProductFixes = (() => {
         },
         
         clearFilters() {
-            log('Clearing all filters');
+            log('Clearing all filters from ProductFixes');
             
             // Reset checkboxes
             $$('input[type="checkbox"]').forEach(cb => cb.checked = false);
@@ -96,8 +96,25 @@ const ProductFixes = (() => {
         },
 
         applyFilters() {
-            log('Applying filters');
-            this.updateProductDisplay(this.getSelectedFilters());
+            log('Applying filters from ProductFixes');
+            
+            try {
+                // Get selected filters
+                const filters = this.getSelectedFilters();
+                
+                // Update product display based on filters
+                this.updateProductDisplay(filters);
+                
+                // Count visible products for debugging
+                const visibleProducts = document.querySelectorAll('.product-card[style*="display: flex"]').length;
+                const totalProducts = document.querySelectorAll('.product-card').length;
+                log(`Filter results: ${visibleProducts}/${totalProducts} products visible after filtering`);
+                
+                return true; // Signal successful filtering
+            } catch (error) {
+                console.error('ProductFixes: Error applying filters:', error);
+                return false;
+            }
         },
 
         getSelectedFilters() {
@@ -111,11 +128,16 @@ const ProductFixes = (() => {
                 }
             };
 
-            $$('.filter-option input:checked').forEach(cb => {
-                const type = cb.getAttribute('name');
-                if (type && filters[type]) {
-                    filters[type].push(cb.value);
-                }
+            $$('input[name="brand"]:checked').forEach(cb => {
+                filters.brands.push(cb.value.toLowerCase());
+            });
+            
+            $$('input[name="category"]:checked').forEach(cb => {
+                filters.categories.push(cb.value);
+            });
+            
+            $$('input[name="size"]:checked').forEach(cb => {
+                filters.sizes.push(cb.value.replace('uk-', ''));
             });
             
             log('Selected filters:', filters);
@@ -124,8 +146,17 @@ const ProductFixes = (() => {
 
         updateProductDisplay(filters) {
             log('Updating product display with filters');
+            
+            // First hide all products
             $$('.product-card').forEach(product => {
-                product.style.display = this.productMatchesFilters(product, filters) ? 'flex' : 'none';
+                product.style.display = 'none';
+            });
+            
+            // Then show only matching products
+            $$('.product-card').forEach(product => {
+                if (this.productMatchesFilters(product, filters)) {
+                    product.style.display = 'flex';
+                }
             });
             
             // Apply sorting after filtering
@@ -136,17 +167,30 @@ const ProductFixes = (() => {
         },
 
         productMatchesFilters(product, filters) {
-            const brand = getDataAttr(product, 'brand');
-            const category = getDataAttr(product, 'category');
+            const brand = (getDataAttr(product, 'brand') || '').toLowerCase();
+            const category = getDataAttr(product, 'category') || '';
             const sizes = getDataAttr(product, 'sizes')?.split(',') || [];
             const price = getFloat(product, 'data-price');
 
-            return (
-                (!filters.brands.length || filters.brands.includes(brand)) &&
-                (!filters.categories.length || filters.categories.includes(category)) &&
-                (!filters.sizes.length || filters.sizes.some(size => sizes.includes(size))) &&
-                price >= filters.priceRange.min && price <= filters.priceRange.max
-            );
+            // Brand filter
+            const meetsBrand = !filters.brands.length || filters.brands.includes(brand);
+            
+            // Price filter
+            const meetsPrice = price >= filters.priceRange.min && price <= filters.priceRange.max;
+            
+            // Size filter
+            const meetsSize = !filters.sizes.length || filters.sizes.some(size => sizes.includes(size));
+            
+            // Category filter with special handling for unisex
+            let meetsCategory = !filters.categories.length;
+            if (!meetsCategory) {
+                const isUnisex = category === 'unisex';
+                meetsCategory = filters.categories.includes(category) ||
+                              (filters.categories.includes('men') && (category === 'men' || isUnisex)) ||
+                              (filters.categories.includes('women') && (category === 'women' || isUnisex));
+            }
+            
+            return meetsBrand && meetsPrice && meetsCategory && meetsSize;
         }
     };
 
