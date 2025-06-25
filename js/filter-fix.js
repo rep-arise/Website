@@ -81,6 +81,7 @@
         // Save current filters to state
         state.activeFilters = filters;
         
+        log('Selected filters:', filters);
         return filters;
     };
 
@@ -213,6 +214,8 @@
 
     // Reset filters
     const resetFilters = () => {
+        log('Resetting all filters');
+        
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
         
         const minInput = document.getElementById('min-price-input');
@@ -221,10 +224,12 @@
         const maxSlider = document.getElementById('max-price');
         
         if (minInput && maxInput && minSlider && maxSlider) {
-            minInput.value = minSlider.min;
-            maxInput.value = maxSlider.max;
-            minSlider.value = minSlider.min;
-            maxSlider.value = maxSlider.max;
+            minInput.value = minSlider.min || 0;
+            maxInput.value = maxSlider.max || 20000;
+            minSlider.value = minSlider.min || 0;
+            maxSlider.value = maxSlider.max || 20000;
+            
+            log(`Reset price range: ${minInput.value} - ${maxInput.value}`);
         }
         
         document.querySelectorAll('.product-card').forEach(card => {
@@ -240,6 +245,8 @@
             minPrice: 0,
             maxPrice: 10000
         };
+        
+        log('All filters reset');
     };
 
     // Fix grid layout
@@ -287,16 +294,28 @@
             const applyBtn = document.querySelector('.apply-filter');
             const clearBtn = document.querySelector('.clear-filter');
             
-            applyBtn?.addEventListener('click', () => {
-                log('Apply filter clicked');
-                applyFilters();
-            });
+            if (applyBtn) {
+                log('Found Apply Filter button, attaching event listener');
+                applyBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    log('Apply filter button clicked');
+                    applyFilters();
+                });
+            } else {
+                error('Apply Filter button not found in DOM');
+            }
 
-            clearBtn?.addEventListener('click', () => {
-                log('Clear filter clicked');
-                resetFilters();
-                applyFilters();
-            });
+            if (clearBtn) {
+                log('Found Clear Filter button, attaching event listener');
+                clearBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    log('Clear filter button clicked');
+                    resetFilters();
+                    applyFilters();
+                });
+            } else {
+                error('Clear Filter button not found in DOM');
+            }
 
             document.querySelectorAll('input[name="brand"]').forEach(cb => {
                 cb.addEventListener('change', () => {
@@ -324,5 +343,4 @@
             window.addEventListener('resize', fixGridLayout);
         }, 1000);
     });
-})(); 
 })(); 

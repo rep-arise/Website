@@ -10,6 +10,7 @@ const ProductFixes = (() => {
     const formatPrice = price => `₹${price.toLocaleString('en-IN')}`;
     const getFloat = (el, attr) => parseFloat(el.getAttribute(attr));
     const getDataAttr = (el, attr) => el.getAttribute(`data-${attr}`);
+    const log = (msg, ...args) => console.log(`PRODUCT FIXES: ${msg}`, ...args);
 
     // Currency module
     const currency = {
@@ -30,21 +31,72 @@ const ProductFixes = (() => {
         },
 
         setupEventListeners() {
+            // Checkbox filters
             $$('.filter-option input[type="checkbox"]').forEach(cb => 
                 cb.addEventListener('change', () => this.applyFilters())
             );
 
+            // Price inputs
             $$('.price-input input').forEach(input => 
                 input.addEventListener('change', () => this.applyFilters())
             );
+            
+            // Filter buttons
+            const applyBtn = $('.apply-filter');
+            const clearBtn = $('.clear-filter');
+            
+            if (applyBtn) {
+                log('Setting up Apply Filter button');
+                applyBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    log('Apply filter button clicked');
+                    this.applyFilters();
+                });
+            }
+            
+            if (clearBtn) {
+                log('Setting up Clear Filter button');
+                clearBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    log('Clear filter button clicked');
+                    this.clearFilters();
+                    this.applyFilters();
+                });
+            }
         },
 
         initializeState() {
             const params = new URLSearchParams(window.location.search);
             // ... rest of initialization logic
         },
+        
+        clearFilters() {
+            log('Clearing all filters');
+            
+            // Reset checkboxes
+            $$('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            // Reset price inputs
+            const minInput = $('#min-price-input');
+            const maxInput = $('#max-price-input');
+            const minSlider = $('#min-price');
+            const maxSlider = $('#max-price');
+            
+            if (minInput && maxInput && minSlider && maxSlider) {
+                minInput.value = minSlider.min || 0;
+                maxInput.value = maxSlider.max || 20000;
+                minSlider.value = minSlider.min || 0;
+                maxSlider.value = maxSlider.max || 20000;
+            }
+            
+            // Show all products
+            $$('.product-card').forEach(card => {
+                card.style.display = 'flex';
+            });
+        },
 
         applyFilters() {
+            log('Applying filters');
             this.updateProductDisplay(this.getSelectedFilters());
         },
 
@@ -54,29 +106,39 @@ const ProductFixes = (() => {
                 categories: [],
                 sizes: [],
                 priceRange: {
-                    min: getFloat($('#min-price-input'), 'value'),
-                    max: getFloat($('#max-price-input'), 'value')
+                    min: parseInt($('#min-price-input')?.value) || 0,
+                    max: parseInt($('#max-price-input')?.value) || 20000
                 }
             };
 
             $$('.filter-option input:checked').forEach(cb => {
                 const type = cb.getAttribute('name');
-                filters[type]?.push(cb.value);
+                if (type && filters[type]) {
+                    filters[type].push(cb.value);
+                }
             });
-
+            
+            log('Selected filters:', filters);
             return filters;
         },
 
         updateProductDisplay(filters) {
+            log('Updating product display with filters');
             $$('.product-card').forEach(product => {
                 product.style.display = this.productMatchesFilters(product, filters) ? 'flex' : 'none';
             });
+            
+            // Apply sorting after filtering
+            const sortSelect = $('#sort-select');
+            if (sortSelect && typeof window.sortProducts === 'function') {
+                window.sortProducts(sortSelect.value);
+            }
         },
 
         productMatchesFilters(product, filters) {
             const brand = getDataAttr(product, 'brand');
             const category = getDataAttr(product, 'category');
-            const sizes = getDataAttr(product, 'sizes').split(',');
+            const sizes = getDataAttr(product, 'sizes')?.split(',') || [];
             const price = getFloat(product, 'data-price');
 
             return (
@@ -143,6 +205,7 @@ const ProductFixes = (() => {
         filter,
         direct,
         init() {
+            log('Initializing ProductFixes module');
             currency.update();
             filter.init();
             direct.init();
@@ -151,7 +214,10 @@ const ProductFixes = (() => {
 })();
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', ProductFixes.init);
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Initializing ProductFixes');
+    ProductFixes.init();
+});
 
 // Export for module usage if needed
 if (typeof module !== 'undefined' && module.exports) {
