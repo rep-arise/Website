@@ -53,8 +53,8 @@
 
             if (toggle) {
                 toggle.addEventListener('click', e => {
-                    e.preventDefault();
-                    console.log('Filter toggle clicked');
+            e.preventDefault();
+            console.log('Filter toggle clicked');
                     this.openSidebar();
                 });
             }
@@ -74,7 +74,7 @@
         },
 
         closeSidebar() {
-            console.log('Closing filter sidebar');
+        console.log('Closing filter sidebar');
             const { overlay, sidebar } = this.elements;
             if (sidebar) sidebar.classList.remove('active');
             if (overlay) overlay.classList.remove('active');
@@ -99,17 +99,34 @@
     // Product sorting and filtering
     const products = {
         init() {
-            this.initDefaultSort();
+            this.ensureDefaultSort();
             this.initBrandLinks();
             this.initSmoothScroll();
         },
 
-        initDefaultSort() {
+        ensureDefaultSort() {
             const sortSelect = $('#sort-select');
             if (sortSelect) {
+                console.log('Setting default sort to "Newest"');
                 sortSelect.value = 'new';
-                if (typeof sortProducts === 'function') {
+                
+                // Apply the sort if the function is available
+                if (typeof window.sortProducts === 'function') {
+                    window.sortProducts('new');
+                    console.log('Applied default "Newest" sort');
+                } else if (typeof sortProducts === 'function') {
                     sortProducts('new');
+                    console.log('Applied default "Newest" sort using local function');
+                } else {
+                    console.log('Sort function not available yet');
+                    
+                    // Set up a small delay to try again
+                    setTimeout(() => {
+                        if (typeof window.sortProducts === 'function') {
+                            window.sortProducts('new');
+                            console.log('Applied delayed default "Newest" sort');
+                        }
+                    }, 500);
                 }
             }
         },
@@ -137,9 +154,9 @@
                             behavior: 'smooth'
                         });
                     }
-                });
             });
-        }
+        });
+    }
     };
 
     // Initialize when DOM is ready

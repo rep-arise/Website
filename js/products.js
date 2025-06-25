@@ -17,18 +17,18 @@
         async fetchProducts(url) {
             try {
                 console.log(`Fetching products from: ${url}`);
-                const res = await fetch(url);
-                if (!res.ok) {
-                    console.error(`Error fetching products from ${url}: Status ${res.status}`);
-                    return [];
-                }
-                const data = await res.json();
-                console.log(`Loaded ${data.length} products from ${url}`);
-                return data;
-            } catch (error) {
-                console.error(`Error fetching products from ${url}:`, error);
+            const res = await fetch(url);
+            if (!res.ok) {
+                console.error(`Error fetching products from ${url}: Status ${res.status}`);
                 return [];
             }
+            const data = await res.json();
+                console.log(`Loaded ${data.length} products from ${url}`);
+            return data;
+        } catch (error) {
+            console.error(`Error fetching products from ${url}:`, error);
+            return [];
+        }
         },
 
         async loadAllProducts() {
@@ -40,12 +40,12 @@
             ]);
 
             console.log('Products loaded:', {
-                men: manProducts.length,
-                women: womenProducts.length,
-                unisex: unisexProducts.length,
-                total: manProducts.length + womenProducts.length + unisexProducts.length
-            });
-
+        men: manProducts.length,
+        women: womenProducts.length,
+        unisex: unisexProducts.length,
+        total: manProducts.length + womenProducts.length + unisexProducts.length
+    });
+    
             return [...manProducts, ...womenProducts, ...unisexProducts];
         },
 
@@ -53,7 +53,7 @@
             const brandTitle = $('h1');
             if (!brandTitle) return null;
 
-            const match = brandTitle.textContent.match(/([A-Za-z\- ]+) Collection/i);
+        const match = brandTitle.textContent.match(/([A-Za-z\- ]+) Collection/i);
             if (!match) return null;
 
             let brand = match[1].trim().toLowerCase().replace(/ /g, '-');
@@ -75,24 +75,32 @@
             if (!grid) return;
 
             const products = Array.from(grid.children).filter(card =>
-                window.getComputedStyle(card).display !== 'none'
-            );
-
-            products.sort((a, b) => {
-                const priceA = parseInt(a.getAttribute('data-price')) || 0;
-                const priceB = parseInt(b.getAttribute('data-price')) || 0;
-                const isNewA = a.hasAttribute('data-new');
-                const isNewB = b.hasAttribute('data-new');
-
-                switch (sortType) {
+            window.getComputedStyle(card).display !== 'none'
+        );
+        
+        products.sort((a, b) => {
+            const priceA = parseInt(a.getAttribute('data-price')) || 0;
+            const priceB = parseInt(b.getAttribute('data-price')) || 0;
+            const isNewA = a.hasAttribute('data-new');
+            const isNewB = b.hasAttribute('data-new');
+            
+            switch (sortType) {
                     case 'low-high': return priceA - priceB;
                     case 'high-low': return priceB - priceA;
-                    default:
+                default:
                         return isNewA !== isNewB ? (isNewA ? -1 : 1) : priceB - priceA;
                 }
             });
 
+            // Remove all products from the grid
+            while (grid.firstChild) {
+                grid.removeChild(grid.firstChild);
+            }
+
+            // Add them back in the sorted order
             products.forEach(product => grid.appendChild(product));
+            
+            console.log(`Sorted ${products.length} products by ${sortType}`);
         },
 
         applyFilters() {
@@ -114,7 +122,7 @@
                 card.style.display = meetsPrice && meetsBrand ? 'flex' : 'none';
             });
 
-            this.sortProducts($('#sort-select')?.value);
+            this.sortProducts($('#sort-select')?.value || 'new');
         }
     };
 
@@ -135,20 +143,20 @@
 
             $$('.btn').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
+                this.style.transform = 'scale(0.95)';
                     setTimeout(() => this.style.transform = 'scale(1)', 100);
                 });
             });
         },
-
+    
         createParticles(element) {
-            const rect = element.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
             Array.from({ length: 3 }).forEach((_, i) => {
                 const particle = createElement('span', 'product-particle');
                 const size = Math.random() * 8 + 4;
-                const x = Math.random() * rect.width;
-                const y = Math.random() * rect.height;
-
+            const x = Math.random() * rect.width;
+            const y = Math.random() * rect.height;
+            
                 Object.assign(particle.style, {
                     width: `${size}px`,
                     height: `${size}px`,
@@ -163,25 +171,25 @@
                     opacity: '0'
                 });
 
-                element.appendChild(particle);
-
-                setTimeout(() => {
-                    particle.style.transition = 'all 0.8s ease-out';
-                    particle.style.opacity = '1';
-                    particle.style.transform = `translate(${(Math.random() - 0.5) * 40}px, ${(Math.random() - 0.5) * 40}px)`;
-
+            element.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.style.transition = 'all 0.8s ease-out';
+                particle.style.opacity = '1';
+                particle.style.transform = `translate(${(Math.random() - 0.5) * 40}px, ${(Math.random() - 0.5) * 40}px)`;
+                
                     setTimeout(() => {
                         particle.style.opacity = '0';
                         setTimeout(() => particle.parentNode === element && element.removeChild(particle), 800);
-                    }, 400);
-                }, i * 100);
+                }, 400);
+            }, i * 100);
             });
         },
 
         addRippleEffect() {
             $$('.btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
-                    const rect = this.getBoundingClientRect();
+            const rect = this.getBoundingClientRect();
                     const ripple = createElement('span', 'ripple');
                     ripple.style.left = `${e.clientX - rect.left}px`;
                     ripple.style.top = `${e.clientY - rect.top}px`;
@@ -198,16 +206,16 @@
                     this.classList.add('active');
 
                     const ripple = createElement('span', 'ripple');
-                    this.appendChild(ripple);
-
+            this.appendChild(ripple);
+            
                     const rect = this.getBoundingClientRect();
                     const size = Math.max(rect.width, rect.height);
                     ripple.style.width = ripple.style.height = `${size}px`;
                     ripple.style.left = ripple.style.top = '0px';
 
                     setTimeout(() => ripple.remove(), 600);
-                });
-            });
+        });
+    });
         },
 
         initializeMobileNav() {
@@ -215,10 +223,10 @@
             const navMenu = $('.nav-menu');
             let navOverlay = $('.nav-overlay');
 
-            if (!navOverlay) {
+    if (!navOverlay) {
                 navOverlay = createElement('div', 'nav-overlay');
-                document.body.appendChild(navOverlay);
-            }
+        document.body.appendChild(navOverlay);
+    }
 
             if (menuToggle && navMenu) {
                 const toggleMenu = (active) => {
@@ -227,8 +235,8 @@
                     navOverlay.classList.toggle('active', active);
                     document.body.style.overflow = active ? 'hidden' : '';
 
-                    const icon = menuToggle.querySelector('i');
-                    if (icon) {
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
                         icon.className = `fas fa-${active ? 'times' : 'bars'}`;
                     }
                 };
@@ -237,8 +245,33 @@
                 navOverlay.addEventListener('click', () => toggleMenu(false));
                 navMenu.querySelectorAll('a').forEach(item => item.addEventListener('click', () => toggleMenu(false)));
             }
+        },
+        
+        initializeSortSelect() {
+            const sortSelect = $('#sort-select');
+            if (sortSelect) {
+                // Set initial value to "new"
+                sortSelect.value = 'new';
+                
+                // Apply initial sort
+                if (typeof productGrid.sortProducts === 'function') {
+                    productGrid.sortProducts('new');
+                }
+                
+                // Add change event listener
+                sortSelect.addEventListener('change', function() {
+                    if (typeof productGrid.sortProducts === 'function') {
+                        productGrid.sortProducts(this.value);
+                    }
+                });
+                
+                console.log('Sort selector initialized with "Newest" as default');
+            }
         }
     };
+
+    // Make sortProducts globally available for other scripts
+    window.sortProducts = productGrid.sortProducts;
 
     // Initialize everything when DOM is ready
     document.addEventListener('DOMContentLoaded', async () => {
@@ -261,5 +294,6 @@
         ui.addRippleEffect();
         ui.initializeSizeSelector();
         ui.initializeMobileNav();
+        ui.initializeSortSelect();
     });
 })(); 

@@ -20,7 +20,15 @@
     // Global state
     const state = {
         brandData: {},
-        products: []
+        products: [],
+        initialized: false,
+        activeFilters: {
+            brands: [],
+            categories: [],
+            sizes: [],
+            minPrice: 0,
+            maxPrice: 10000
+        }
     };
 
     // Normalize brand names for consistent matching
@@ -50,23 +58,31 @@
                 log(`Brand ${brand} has ${products.length} products`);
             });
             
-            fixProductDisplay();
+            state.initialized = true;
+            applyFilters(); // Apply filters after products are loaded
         } catch (err) {
             error('Error loading products:', err);
         }
     };
 
     // Get selected filters
-    const getSelectedFilters = () => ({
-        brands: Array.from(document.querySelectorAll('input[name="brand"]:checked'))
-            .map(cb => normalizeBrandName(cb.value)),
-        categories: Array.from(document.querySelectorAll('input[name="category"]:checked'))
-            .map(cb => cb.value),
-        sizes: Array.from(document.querySelectorAll('input[name="size"]:checked'))
-            .map(cb => cb.value.replace('uk-', '')),
-        minPrice: parseInt(document.getElementById('min-price-input')?.value || 0),
-        maxPrice: parseInt(document.getElementById('max-price-input')?.value || 10000)
-    });
+    const getSelectedFilters = () => {
+        const filters = {
+            brands: Array.from(document.querySelectorAll('input[name="brand"]:checked'))
+                .map(cb => normalizeBrandName(cb.value)),
+            categories: Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                .map(cb => cb.value),
+            sizes: Array.from(document.querySelectorAll('input[name="size"]:checked'))
+                .map(cb => cb.value.replace('uk-', '')),
+            minPrice: parseInt(document.getElementById('min-price-input')?.value || 0),
+            maxPrice: parseInt(document.getElementById('max-price-input')?.value || 10000)
+        };
+        
+        // Save current filters to state
+        state.activeFilters = filters;
+        
+        return filters;
+    };
 
     // Check if a product matches the filters
     const productMatchesFilters = (product, filters) => {
@@ -85,73 +101,104 @@
         return meetsBrand && meetsPrice && meetsCategory && meetsSize;
     };
 
-    // Fix product display
-    const fixProductDisplay = () => {
+    // Apply filters to product grid
+    const applyFilters = () => {
+        if (!state.initialized) {
+            log('Cannot apply filters - not initialized yet');
+            return;
+        }
+        
         const grid = document.querySelector('.products-grid');
         if (!grid) {
             error('Products grid not found');
             return;
         }
 
-        const cards = grid.querySelectorAll('.product-card');
-        if (!cards.length) {
+        const filters = getSelectedFilters();
+        log('Applying filters:', filters);
+        
+        // Get all product cards
+        const allCards = Array.from(grid.querySelectorAll('.product-card'));
+        if (!allCards.length) {
             warn('No product cards found in grid');
             return;
         }
-
-        const filters = getSelectedFilters();
-        log('Selected filters', filters);
-
-        if (filters.brands.length) {
+        
+        // Reset all cards to hidden first
+        allCards.forEach(card => {
+            card.style.display = 'none';
+            card.classList.remove('filter-fix-forced');
+        });
+        
+        // Handle brand filtering specifically
+        if (filters.brands.length > 0) {
             log(`Brand filter applied for: ${filters.brands.join(', ')}`);
-
+            
+            // For each selected brand
             filters.brands.forEach(brand => {
-                const brandCards = Array.from(cards).filter(card => 
+                // Get all cards for this brand
+                const brandCards = allCards.filter(card => 
                     normalizeBrandName(card.getAttribute('data-brand')) === brand
                 );
-
-                const visibleCards = brandCards.filter(card => 
-                    window.getComputedStyle(card).display !== 'none'
-                );
-
-                log(`Brand ${brand} - Total: ${brandCards.length}, Visible: ${visibleCards.length}`);
-
-                if (state.brandData[brand]?.length) {
-                    const expectedCount = state.brandData[brand].filter(product => 
-                        productMatchesFilters(product, { ...filters, brands: [] })
-                    ).length;
-
-                    log(`Brand ${brand} - Expected visible: ${expectedCount}`);
-
-                    if (visibleCards.length < expectedCount || visibleCards.length <= 1) {
-                        warn(`Fixing display for brand ${brand}`);
-                        
-                        brandCards.forEach(card => {
-                            const cardData = {
-                                price: parseInt(card.getAttribute('data-price') || 0),
-                                category: card.getAttribute('data-category') || '',
-                                sizes: (card.getAttribute('data-sizes') || '').split(',')
-                            };
-
-                            const meetsPrice = cardData.price >= filters.minPrice && cardData.price <= filters.maxPrice;
-                            const meetsSize = !filters.sizes.length || filters.sizes.some(size => cardData.sizes.includes(size));
-                            
-                            let meetsCategory = !filters.categories.length;
-                            if (!meetsCategory) {
-                                const isUnisex = cardData.category === 'unisex';
-                                meetsCategory = filters.categories.includes(cardData.category) ||
-                                              (filters.categories.includes('men') && (cardData.category === 'men' || isUnisex)) ||
-                                              (filters.categories.includes('women') && (cardData.category === 'women' || isUnisex));
-                            }
-
-                            if (meetsPrice && meetsCategory && meetsSize) {
-                                card.style.display = 'flex';
-                                card.classList.add('filter-fix-forced');
-                            }
-                        });
+                
+                log(`Found ${brandCards.length} cards for brand ${brand}`);
+                
+                // Show cards that match other filters
+                brandCards.forEach(card => {
+                    const cardData = {
+                        price: parseInt(card.getAttribute('data-price') || 0),
+                        category: card.getAttribute('data-category') || '',
+                        sizes: (card.getAttribute('data-sizes') || '').split(',')
+                    };
+                    
+                    const meetsPrice = cardData.price >= filters.minPrice && cardData.price <= filters.maxPrice;
+                    const meetsSize = !filters.sizes.length || filters.sizes.some(size => cardData.sizes.includes(size));
+                    
+                    let meetsCategory = !filters.categories.length;
+                    if (!meetsCategory) {
+                        const isUnisex = cardData.category === 'unisex';
+                        meetsCategory = filters.categories.includes(cardData.category) ||
+                                      (filters.categories.includes('men') && (cardData.category === 'men' || isUnisex)) ||
+                                      (filters.categories.includes('women') && (cardData.category === 'women' || isUnisex));
                     }
+                    
+                    if (meetsPrice && meetsCategory && meetsSize) {
+                        card.style.display = 'flex';
+                        card.classList.add('filter-fix-forced');
+                    }
+                });
+            });
+        } else {
+            // No brand filter, apply other filters
+            allCards.forEach(card => {
+                const cardData = {
+                    price: parseInt(card.getAttribute('data-price') || 0),
+                    category: card.getAttribute('data-category') || '',
+                    sizes: (card.getAttribute('data-sizes') || '').split(',')
+                };
+                
+                const meetsPrice = cardData.price >= filters.minPrice && cardData.price <= filters.maxPrice;
+                const meetsSize = !filters.sizes.length || filters.sizes.some(size => cardData.sizes.includes(size));
+                
+                let meetsCategory = !filters.categories.length;
+                if (!meetsCategory) {
+                    const isUnisex = cardData.category === 'unisex';
+                    meetsCategory = filters.categories.includes(cardData.category) ||
+                                  (filters.categories.includes('men') && (cardData.category === 'men' || isUnisex)) ||
+                                  (filters.categories.includes('women') && (cardData.category === 'women' || isUnisex));
+                }
+                
+                if (meetsPrice && meetsCategory && meetsSize) {
+                    card.style.display = 'flex';
                 }
             });
+        }
+        
+        // Apply sorting after filtering
+        const sortSelect = document.getElementById('sort-select');
+        if (sortSelect && typeof sortProducts === 'function') {
+            sortProducts(sortSelect.value);
+            log(`Applied sorting: ${sortSelect.value}`);
         }
     };
 
@@ -184,6 +231,15 @@
             card.style.display = 'flex';
             card.classList.remove('filter-fix-forced');
         });
+        
+        // Reset state filters
+        state.activeFilters = {
+            brands: [],
+            categories: [],
+            sizes: [],
+            minPrice: 0,
+            maxPrice: 10000
+        };
     };
 
     // Fix grid layout
@@ -215,6 +271,14 @@
             if (window.ALL_PRODUCTS?.length) {
                 state.products = window.ALL_PRODUCTS;
                 log(`Found ${state.products.length} products in global variable`);
+                
+                // Process products by brand
+                state.products.forEach(product => {
+                    const brand = normalizeBrandName(product.brand);
+                    (state.brandData[brand] = state.brandData[brand] || []).push(product);
+                });
+                
+                state.initialized = true;
             } else {
                 loadAllProducts();
             }
@@ -225,28 +289,40 @@
             
             applyBtn?.addEventListener('click', () => {
                 log('Apply filter clicked');
-                setTimeout(fixProductDisplay, 100);
+                applyFilters();
             });
 
             clearBtn?.addEventListener('click', () => {
                 log('Clear filter clicked');
-                setTimeout(fixProductDisplay, 100);
+                resetFilters();
+                applyFilters();
             });
 
             document.querySelectorAll('input[name="brand"]').forEach(cb => {
                 cb.addEventListener('change', () => {
                     log(`Brand checkbox ${cb.value} changed to ${cb.checked}`);
-                    setTimeout(fixProductDisplay, 100);
+                    applyFilters();
                 });
             });
+            
+            // Listen for sort changes
+            const sortSelect = document.getElementById('sort-select');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', () => {
+                    log(`Sort changed to ${sortSelect.value}`);
+                    if (typeof sortProducts === 'function') {
+                        sortProducts(sortSelect.value);
+                    }
+                });
+            }
 
             // Initial fixes
-            fixProductDisplay();
+            applyFilters();
             fixGridLayout();
             
-            // Set up periodic checks
-            setInterval(fixProductDisplay, 1000);
+            // Set up periodic check for layout only
             window.addEventListener('resize', fixGridLayout);
         }, 1000);
     });
+})(); 
 })(); 
