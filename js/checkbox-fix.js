@@ -12,7 +12,7 @@
     // Checkbox functionality
     const checkboxFix = {
         init() {
-            console.log('CHECKBOX FIX: Initializing');
+        console.log('CHECKBOX FIX: Initializing');
             this.setupFilterEventListeners();
         },
 
@@ -29,14 +29,14 @@
         initCheckboxes(checkboxes) {
             checkboxes.forEach(checkbox => {
                 // Remove any existing event listeners
-                const newCheckbox = checkbox.cloneNode(true);
-                checkbox.parentNode.replaceChild(newCheckbox, checkbox);
-                
-                // Add new event listener
+            const newCheckbox = checkbox.cloneNode(true);
+            checkbox.parentNode.replaceChild(newCheckbox, checkbox);
+            
+            // Add new event listener
                 newCheckbox.addEventListener('change', () => {
                     console.log(`CHECKBOX FIX: Checkbox ${newCheckbox.name}:${newCheckbox.value} changed to ${newCheckbox.checked}`);
-                    
-                    // Trigger filter application
+                
+                // Trigger filter application
                     const applyFilterBtn = $('.apply-filter');
                     if (applyFilterBtn) applyFilterBtn.click();
                 });
@@ -47,7 +47,7 @@
             const applyFilterBtn = $('.apply-filter');
             const clearFilterBtn = $('.clear-filter');
             
-            if (applyFilterBtn) {
+                if (applyFilterBtn) {
                 applyFilterBtn.addEventListener('click', () => {
                     console.log('CHECKBOX FIX: Apply filter clicked');
                 });

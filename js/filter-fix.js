@@ -40,9 +40,9 @@
         
         try {
             const [menProducts, womenProducts, unisexProducts] = await Promise.all([
-                fetch('man/products.json').then(res => res.json()).catch(() => []),
-                fetch('women/products.json').then(res => res.json()).catch(() => []),
-                fetch('unisex/products.json').then(res => res.json()).catch(() => [])
+            fetch('man/products.json').then(res => res.json()).catch(() => []),
+            fetch('women/products.json').then(res => res.json()).catch(() => []),
+            fetch('unisex/products.json').then(res => res.json()).catch(() => [])
             ]);
 
             state.products = [...menProducts, ...womenProducts, ...unisexProducts];
@@ -98,7 +98,7 @@
                            (filters.categories.includes('men') && (product.category === 'men' || isUnisex)) ||
                            (filters.categories.includes('women') && (product.category === 'women' || isUnisex));
         }
-        
+            
         return meetsBrand && meetsPrice && meetsCategory && meetsSize;
     };
 
@@ -163,11 +163,11 @@
                                       (filters.categories.includes('women') && (cardData.category === 'women' || isUnisex));
                     }
                     
-                    if (meetsPrice && meetsCategory && meetsSize) {
-                        card.style.display = 'flex';
-                        card.classList.add('filter-fix-forced');
-                    }
-                });
+                            if (meetsPrice && meetsCategory && meetsSize) {
+                                card.style.display = 'flex';
+                                card.classList.add('filter-fix-forced');
+                            }
+                        });
             });
         } else {
             // No brand filter, apply other filters

@@ -45,7 +45,7 @@
                     filterOverlayFound: !!overlay,
                     filterCloseFound: !!close
                 });
-            }
+    }
         },
 
         bindEvents() {
@@ -78,7 +78,7 @@
             const { overlay, sidebar } = this.elements;
             if (sidebar) sidebar.classList.remove('active');
             if (overlay) overlay.classList.remove('active');
-            document.body.style.overflow = '';
+        document.body.style.overflow = '';
         },
 
         initPriceSliders() {
@@ -95,7 +95,7 @@
             syncInputs(maxPriceSlider, maxPriceInput);
         }
     };
-
+    
     // Product sorting and filtering
     const products = {
         init() {
@@ -106,9 +106,9 @@
 
         ensureDefaultSort() {
             const sortSelect = $('#sort-select');
-            if (sortSelect) {
+    if (sortSelect) {
                 console.log('Setting default sort to "Newest"');
-                sortSelect.value = 'new';
+        sortSelect.value = 'new';
                 
                 // Apply the sort if the function is available
                 if (typeof window.sortProducts === 'function') {
@@ -127,7 +127,7 @@
                             console.log('Applied delayed default "Newest" sort');
                         }
                     }, 500);
-                }
+            }
             }
         },
 
@@ -137,7 +137,7 @@
                     const link = item.querySelector('.brand-name')?.getAttribute('href');
                     if (link) window.location.href = link;
                 });
-            });
+        });
         },
 
         initSmoothScroll() {
